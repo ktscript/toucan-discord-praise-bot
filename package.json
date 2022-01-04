@@ -1,0 +1,33 @@
+{
+  "name": "toucan-discord-praise-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "tsc && node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lazaralex98/toucan-discord-praise-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lazaralex98/toucan-discord-praise-bot/issues"
+  },
+  "homepage": "https://github.com/lazaralex98/toucan-discord-praise-bot#readme",
+  "devDependencies": {
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "@discordjs/rest": "^0.2.0-canary.0",
+    "axios": "^0.24.0",
+    "discord-api-types": "^0.26.1",
+    "discord-command-parser": "^1.5.3",
+    "discord.js": "^13.5.0",
+    "dotenv": "^10.0.0"
+  }
+}
