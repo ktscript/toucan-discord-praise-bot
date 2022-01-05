@@ -1,5 +1,6 @@
 import { Message } from "discord.js";
 import { parse } from "discord-command-parser";
+import ifcPraise from "../utils/ifcPraise";
 require("dotenv").config();
 
 const Discord = require("discord.js");
@@ -19,19 +20,8 @@ client.on("messageCreate", (msg: Message) => {
   if (!parsed.success) return;
   const reader = parsed.reader;
 
-  /**
-   * Example message: !praise @frankTurtle.crypto for the legendary BCT price bot here in discord
-   * Example message: !praise @frankTurtle.crypto @toucan-praise-bot
-   * Example message: !praise @frankTurtle.crypto & @toucan-praise-bot for doing good
-   * Example message: !praise the team for doing good
-   * Example message: !praise @everyone you know
-   */
   if (parsed.command === "praise") {
-    interface Praise {
-      people: string[];
-      message?: string;
-    }
-    const praise: Praise = { people: [] };
+    const praise: ifcPraise = { people: [] };
     reader.args.some(() => {
       const arg = reader.getString();
       console.log(arg);
@@ -61,6 +51,7 @@ client.on("messageCreate", (msg: Message) => {
 // the basic gist is done, but there's still stuff to do here
 // TODO clean this mess up
 // TODO store the validated praises
+// TODO integrate with collab.land
 // TODO learn how to give Discord rewards
 
 client.login(token);

@@ -4,6 +4,8 @@
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
+    "outDir": "dist",
+    "rootDirs": ["src", "tests"],
 
     /* Experimental Options */
     "experimentalDecorators": true,

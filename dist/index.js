@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const discord_command_parser_1 = require("discord-command-parser");
-require("dotenv").config(); //initialize dotenv
+require("dotenv").config();
 const Discord = require("discord.js");
 const client = new Discord.Client({
     intents: ["GUILDS", "DIRECT_MESSAGES", "GUILD_MESSAGES"],
@@ -51,5 +51,6 @@ client.on("messageCreate", (msg) => {
 // the basic gist is done, but there's still stuff to do here
 // TODO clean this mess up
 // TODO store the validated praises
+// TODO integrate with collab.land
 // TODO learn how to give Discord rewards
 client.login(token);
