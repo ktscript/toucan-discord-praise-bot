@@ -1,18 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2021",
+    "target": "es2018",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
     "outDir": "dist",
-    "rootDirs": ["src", "tests"],
-
-    /* Experimental Options */
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-
-    /* Advanced Options */
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-  }
+    "declaration": true
+  },
+  "include": ["./scripts", "./test", "./typechain"],
+  "files": ["./hardhat.config.ts"]
 }

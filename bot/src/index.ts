@@ -49,9 +49,8 @@ client.on("messageCreate", (msg: Message) => {
 });
 
 // the basic gist is done, but there's still stuff to do here
-// TODO clean this mess up
-// TODO store the validated praises
-// TODO integrate with collab.land
-// TODO learn how to give Discord rewards
+// TODO use collab.land to mint tokens & send them to the praised user's address
 
 client.login(token);
+// TODO make a PraiseToken ERC-20 that will be used when praised people.
+// and, the bot, when someone owns at least one PraiseToken will have a nice nickname or something
