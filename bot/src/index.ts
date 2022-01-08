@@ -8,7 +8,7 @@ const client = new Discord.Client({
   intents: ["GUILDS", "DIRECT_MESSAGES", "GUILD_MESSAGES"],
   partials: ["MESSAGE", "CHANNEL"],
 });
-const token = process.env.TOKEN;
+const discordToken = process.env.DISCORD_TOKEN;
 const PREFIX = "!";
 
 client.on("ready", () => {
@@ -48,9 +48,5 @@ client.on("messageCreate", (msg: Message) => {
   }
 });
 
-// the basic gist is done, but there's still stuff to do here
-// TODO use collab.land to mint tokens & send them to the praised user's address
-
-client.login(token);
-// TODO make a PraiseToken ERC-20 that will be used when praised people.
-// and, the bot, when someone owns at least one PraiseToken will have a nice nickname or something
+client.login(discordToken);
+// TODO make this bot send ToucanPraiseToken to the praised person
