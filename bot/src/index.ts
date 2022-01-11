@@ -10,6 +10,7 @@ const client = new Discord.Client({
 });
 const discordToken = process.env.DISCORD_TOKEN;
 const PREFIX = "!";
+const clientUrl = "https://localhost:3500";
 
 client.on("ready", () => {
   console.log("Bot Online! Woohoo!");
@@ -20,10 +21,25 @@ client.on("messageCreate", (msg: Message) => {
   if (!parsed.success) return;
   const reader = parsed.reader;
 
-  // TODO make a way to connect to wallet (Metamask + Walletconnect)
+  /**
+   * TODO make a way to connect to wallet (Metamask + Walletconnect)
+   *
+   * My basic idea of how I will do this?
+   * 1. User uses the !connect command and gets send to a Next.js app
+   * 2. User authenticates his wallet in the Next.js app
+   * 3. Next.js app stores the link between the wallet address and the Discord ID in one of 2 ways:
+   *    a. a Supabase dB
+   *    b. a mapping within ToucanPraiseToken.sol
+   *
+   * 4. An interval will be set to check each discord ID whether they have connected a wallet and how many ToucanPraiseTokens they have
+   * 5. Based on what the check returns, we can take different actions like:
+   *    a. Let non-connected people know they should connect
+   *    b. Change their role/emoji/nickname based on their TPT (ToucanPraiseToken) balance
+   */
+
   if (parsed.command === "connect") {
     console.log("Connect attempted");
-    msg.reply("You want to connect your wallet?");
+    msg.reply(`You want to connect your wallet? Go to ${clientUrl}`);
   }
 
   if (parsed.command === "praise") {
