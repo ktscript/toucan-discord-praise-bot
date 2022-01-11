@@ -10,7 +10,7 @@ const client = new Discord.Client({
 });
 const discordToken = process.env.DISCORD_TOKEN;
 const PREFIX = "!";
-const clientUrl = "https://localhost:3500";
+const clientUrl = process.env.CLIENT_URL;
 
 client.on("ready", () => {
   console.log("Bot Online! Woohoo!");
@@ -35,6 +35,10 @@ client.on("messageCreate", (msg: Message) => {
    * 5. Based on what the check returns, we can take different actions like:
    *    a. Let non-connected people know they should connect
    *    b. Change their role/emoji/nickname based on their TPT (ToucanPraiseToken) balance
+   *
+   * Extras:
+   *
+   * - user should be able to manage his wallet connections from the Next.js app (change his wallet, etc)
    */
 
   if (parsed.command === "connect") {
