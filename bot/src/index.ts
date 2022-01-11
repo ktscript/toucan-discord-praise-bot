@@ -21,6 +21,10 @@ client.on("messageCreate", (msg: Message) => {
   const reader = parsed.reader;
 
   // TODO make a way to connect to wallet (Metamask + Walletconnect)
+  if (parsed.command === "connect") {
+    console.log("Connect attempted");
+    msg.reply("You want to connect your wallet?");
+  }
 
   if (parsed.command === "praise") {
     const praise: ifcPraise = { people: [] };
