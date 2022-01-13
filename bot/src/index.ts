@@ -30,6 +30,7 @@ client.on("messageCreate", (msg: Message) => {
    * 3. Next.js app stores the link between the wallet address and the Discord ID in one of 2 ways:
    *    a. a Supabase dB
    *    b. a mapping within ToucanPraiseToken.sol
+   * * Decided to use Supabase because it comes with a pre-made Discord auth making my life easier
    *
    * 4. An interval will be set to check each discord ID whether they have connected a wallet and how many ToucanPraiseTokens they have
    * 5. Based on what the check returns, we can take different actions like:

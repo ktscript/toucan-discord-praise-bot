@@ -1,10 +1,13 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { ChevronRightIcon } from "@heroicons/react/solid";
 import Link from "next/link";
+import { supabase } from "../utils/supabaseClient";
+import { User } from "@supabase/supabase-js";
+import { AuthBtn } from "../components/Buttons";
 
 const navigation = [
   { name: "Products", href: "https://toucan.earth/#products" },
@@ -14,6 +17,55 @@ const navigation = [
 ];
 
 const Home: NextPage = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(supabase.auth.user());
+
+  console.log("User:", user);
+
+  if (user?.aud) {
+    console.log("you are authed");
+  }
+
+  const saveConnection = async () => {
+    interface discordToWalletConnection {
+      userId?: string;
+      discordId: string;
+      walletAddress: string;
+    }
+
+    const valueToInsert: discordToWalletConnection = {
+      userId: user?.id,
+      discordId: user?.user_metadata.provider_id,
+      walletAddress: "baba",
+    };
+
+    const { data, error } = await supabase
+      .from<discordToWalletConnection>("discordToWalletConnections")
+      .insert([valueToInsert]);
+  };
+
+  async function signout() {
+    const { error } = await supabase.auth.signOut();
+  }
+
+  const handleDiscordAuth = async () => {
+    try {
+      setLoading(true);
+      const { user, session, error } = await supabase.auth.signIn({
+        provider: "discord",
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      alert(error.error_description || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleWalletAuth = async () => {
+    console.log("trying to connect wallet");
+  };
+
   return (
     <div>
       <Head>
@@ -67,6 +119,14 @@ const Home: NextPage = () => {
                   ))}
                 </div>
               </div>
+              <div className="hidden md:flex">
+                <AuthBtn
+                  user={user}
+                  loading={loading}
+                  handleWalletAuth={handleWalletAuth}
+                  handleDiscordAuth={handleDiscordAuth}
+                />
+              </div>
             </nav>
 
             <Transition
@@ -110,6 +170,12 @@ const Home: NextPage = () => {
                       </a>
                     ))}
                   </div>
+                  <AuthBtn
+                    user={user}
+                    loading={loading}
+                    handleWalletAuth={handleWalletAuth}
+                    handleDiscordAuth={handleDiscordAuth}
+                  />
                 </div>
               </Popover.Panel>
             </Transition>
@@ -135,16 +201,15 @@ const Home: NextPage = () => {
                       </a>
                     </Link>
                     <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-black sm:mt-5 sm:leading-none lg:mt-6 lg:text-5xl xl:text-6xl">
-                      <span className="md:block">Auth to our praise bot,</span>{" "}
+                      <span className="md:block">Auth to our bot,</span>{" "}
                       <span className="text-green-500 md:block">
                         earn on-chain reputation.
                       </span>
                     </h1>
                     <p className="mt-3 text-base text-gray-600 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                       We are using this bot with the associated token to create
-                      a reputation system for our community. Use the form to
-                      connect your wallet to your discord or scroll down to
-                      learn more.
+                      a reputation system for our community. Use the button on
+                      the right to connect your wallet to your discord.
                     </p>
                     <p className="mt-8 text-sm text-black uppercase tracking-wide font-semibold sm:mt-10">
                       Used by
@@ -167,27 +232,18 @@ const Home: NextPage = () => {
                     <div className="px-4 py-8 sm:px-10">
                       <div>
                         <p className="text-sm text-center font-medium text-gray-700">
-                          Sign in with Discord &amp; then connect your wallet
+                          Authenticate with Discord &amp; then connect your
+                          wallet
                         </p>
 
                         <div className="mt-4">
                           <div>
-                            {/* TODO make a Discord-based auth */}
-                            <a
-                              href="#discord"
-                              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70"
-                            >
-                              <span className="mr-1">Sign in with Discord</span>
-                              <svg
-                                className="w-5 h-5"
-                                viewBox="0 0 20 20"
-                                aria-hidden="true"
-                                fill="currentColor"
-                              >
-                                <path d="M9.593 10.971c-.542 0-.969.475-.969 1.055 0 .578.437 1.055.969 1.055.541 0 .968-.477.968-1.055.011-.581-.427-1.055-.968-1.055zm3.468 0c-.542 0-.969.475-.969 1.055 0 .578.437 1.055.969 1.055.541 0 .968-.477.968-1.055-.001-.581-.427-1.055-.968-1.055z"></path>
-                                <path d="M17.678 3H4.947A1.952 1.952 0 0 0 3 4.957v12.844c0 1.083.874 1.957 1.947 1.957H15.72l-.505-1.759 1.217 1.131 1.149 1.064L19.625 22V4.957A1.952 1.952 0 0 0 17.678 3zM14.01 15.407s-.342-.408-.626-.771c1.244-.352 1.719-1.13 1.719-1.13-.39.256-.76.438-1.093.562a6.679 6.679 0 0 1-3.838.398 7.944 7.944 0 0 1-1.396-.41 5.402 5.402 0 0 1-.693-.321c-.029-.021-.057-.029-.085-.048a.117.117 0 0 1-.039-.03c-.171-.094-.266-.16-.266-.16s.456.76 1.663 1.121c-.285.36-.637.789-.637.789-2.099-.067-2.896-1.444-2.896-1.444 0-3.059 1.368-5.538 1.368-5.538 1.368-1.027 2.669-.998 2.669-.998l.095.114c-1.71.495-2.499 1.245-2.499 1.245s.21-.114.561-.275c1.016-.446 1.823-.57 2.156-.599.057-.009.105-.019.162-.019a7.756 7.756 0 0 1 4.778.893s-.751-.712-2.366-1.206l.133-.152s1.302-.029 2.669.998c0 0 1.368 2.479 1.368 5.538 0-.001-.807 1.376-2.907 1.443z"></path>
-                              </svg>
-                            </a>
+                            <AuthBtn
+                              user={user}
+                              loading={loading}
+                              handleWalletAuth={handleWalletAuth}
+                              handleDiscordAuth={handleDiscordAuth}
+                            />
                           </div>
                         </div>
                       </div>
