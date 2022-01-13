@@ -1,20 +1,23 @@
 import { User } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
 
-export const AuthBtn = ({
-  user,
-  loading,
-  handleWalletAuth,
-  handleDiscordAuth,
-}: {
-  user: User | null;
+interface IfcAuthBtnProps {
+  discordAuthStatus: boolean;
   loading: boolean;
   handleWalletAuth: Function;
   handleDiscordAuth: Function;
-}) => {
+}
+
+export const AuthBtn = ({
+  discordAuthStatus,
+  loading,
+  handleWalletAuth,
+  handleDiscordAuth,
+}: IfcAuthBtnProps) => {
   return (
     <button
       onClick={() => {
-        if (user?.aud) {
+        if (discordAuthStatus) {
           handleWalletAuth();
         } else {
           handleDiscordAuth();
@@ -24,11 +27,11 @@ export const AuthBtn = ({
     >
       {loading ? (
         "Loading..."
-      ) : user?.aud ? (
+      ) : discordAuthStatus ? (
         "Connect your wallet"
       ) : (
         <>
-          <span className="mr-1">Authenticate with Discord</span>
+          <span className="mr-1">{"Authenticate with Discord"}</span>
           <svg
             className="w-5 h-5"
             viewBox="0 0 20 20"

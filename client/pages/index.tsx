@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { ChevronRightIcon } from "@heroicons/react/solid";
@@ -8,6 +8,9 @@ import Link from "next/link";
 import { supabase } from "../utils/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { AuthBtn } from "../components/Buttons";
+import { ethers } from "ethers";
+import { toast, ToastOptions } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const navigation = [
   { name: "Products", href: "https://toucan.earth/#products" },
@@ -16,32 +19,40 @@ const navigation = [
   { name: "Discord", href: "https://discord.gg/cDbWuZKWxe" },
 ];
 
+interface discordToWalletConnection {
+  user_id: string;
+  discord_id: string;
+  wallet_address: string;
+}
+
 const Home: NextPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(supabase.auth.user());
+  const [wallet, setWallet] = useState<string>("");
+  console.log("user", user);
 
-  console.log("User:", user);
+  // TODO why does it not set the user and everything upon being redirected back from Discord?
 
-  if (user?.aud) {
-    console.log("you are authed");
-  }
-
-  const saveConnection = async () => {
-    interface discordToWalletConnection {
-      userId?: string;
-      discordId: string;
-      walletAddress: string;
+  /**
+   * I didn't want to use these hooks, but I need to because of a hydration error which is explained here:
+   * https://nextjs.org/docs/messages/react-hydration-error
+   */
+  const [discordAuthStatus, setDiscordAuthStatus] = useState<boolean>(false);
+  useEffect(() => {
+    console.log("ran");
+    if (user?.aud) {
+      setDiscordAuthStatus(true);
     }
+  }, []);
 
-    const valueToInsert: discordToWalletConnection = {
-      userId: user?.id,
-      discordId: user?.user_metadata.provider_id,
-      walletAddress: "baba",
-    };
-
-    const { data, error } = await supabase
-      .from<discordToWalletConnection>("discordToWalletConnections")
-      .insert([valueToInsert]);
+  const toastOptions: ToastOptions = {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
   };
 
   async function signout() {
@@ -56,14 +67,57 @@ const Home: NextPage = () => {
       });
       if (error) throw error;
     } catch (error: any) {
-      alert(error.error_description || error.message);
+      toast.error(error.error_description || error.message, toastOptions);
     } finally {
       setLoading(false);
     }
   };
 
+  /**
+   * @description Attempts to connect to the MetaMask wallet and set the account in React State, calling getVoter() and getAllProposals() at the end.
+   * @returns true or false depending on success or failure.
+   */
   const handleWalletAuth = async () => {
-    console.log("trying to connect wallet");
+    try {
+      setLoading(true);
+      if (!user?.aud) {
+        throw new Error("You are not authenticated");
+      }
+
+      // @ts-ignore
+      const { ethereum } = window;
+      if (!ethereum) {
+        throw new Error("MetaMask not connected");
+      }
+
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const { chainId } = await provider.getNetwork();
+      if (chainId != 4) {
+        throw new Error("Make sure you are on Rinkeby Test Network.");
+      }
+
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      setWallet(accounts[0]);
+
+      const { data, error } = await supabase
+        .from<discordToWalletConnection>("discordToWalletConnections")
+        .insert([
+          {
+            user_id: user.id,
+            discord_id: user.user_metadata.provider_id,
+            wallet_address: accounts[0],
+          },
+        ]);
+      if (error) throw error;
+
+      toast(`Connected your wallet`, toastOptions);
+    } catch (error: any) {
+      toast.error(error.message, toastOptions);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -121,7 +175,7 @@ const Home: NextPage = () => {
               </div>
               <div className="hidden md:flex">
                 <AuthBtn
-                  user={user}
+                  discordAuthStatus={discordAuthStatus}
                   loading={loading}
                   handleWalletAuth={handleWalletAuth}
                   handleDiscordAuth={handleDiscordAuth}
@@ -171,7 +225,7 @@ const Home: NextPage = () => {
                     ))}
                   </div>
                   <AuthBtn
-                    user={user}
+                    discordAuthStatus={discordAuthStatus}
                     loading={loading}
                     handleWalletAuth={handleWalletAuth}
                     handleDiscordAuth={handleDiscordAuth}
@@ -232,14 +286,15 @@ const Home: NextPage = () => {
                     <div className="px-4 py-8 sm:px-10">
                       <div>
                         <p className="text-sm text-center font-medium text-gray-700">
-                          Authenticate with Discord &amp; then connect your
-                          wallet
+                          {discordAuthStatus
+                            ? "Connect your wallet to your Discord"
+                            : "Authenticate with Discord & then connect your wallet"}
                         </p>
 
                         <div className="mt-4">
                           <div>
                             <AuthBtn
-                              user={user}
+                              discordAuthStatus={discordAuthStatus}
                               loading={loading}
                               handleWalletAuth={handleWalletAuth}
                               handleDiscordAuth={handleDiscordAuth}
