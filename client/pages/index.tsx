@@ -11,6 +11,8 @@ import { AuthBtn } from "../components/Buttons";
 import { ethers } from "ethers";
 import { toast, ToastOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import toastOptions from "../utils/toastOptions";
+import { useRouter } from "next/router";
 
 const navigation = [
   { name: "Products", href: "https://toucan.earth/#products" },
@@ -29,9 +31,12 @@ const Home: NextPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(supabase.auth.user());
   const [wallet, setWallet] = useState<string>("");
-  console.log("user", user);
 
-  // TODO why does it not set the user and everything upon being redirected back from Discord?
+  /**
+   * TODO why on God's green earth does the fucking redirect from Discord come back to my app without the session already set?
+   * why the fuck does the user HAVE to refresh the page to have the session cookie set?
+   * I HATE FUCKING SESSION COOKIES AND AUTH SYSTEMS
+   */
 
   /**
    * I didn't want to use these hooks, but I need to because of a hydration error which is explained here:
@@ -39,21 +44,11 @@ const Home: NextPage = () => {
    */
   const [discordAuthStatus, setDiscordAuthStatus] = useState<boolean>(false);
   useEffect(() => {
-    console.log("ran");
+    console.log("user:", user);
     if (user?.aud) {
       setDiscordAuthStatus(true);
     }
   }, []);
-
-  const toastOptions: ToastOptions = {
-    position: "bottom-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  };
 
   async function signout() {
     const { error } = await supabase.auth.signOut();
@@ -62,9 +57,12 @@ const Home: NextPage = () => {
   const handleDiscordAuth = async () => {
     try {
       setLoading(true);
-      const { user, session, error } = await supabase.auth.signIn({
-        provider: "discord",
-      });
+      const { user, session, error } = await supabase.auth.signIn(
+        {
+          provider: "discord",
+        },
+        { redirectTo: "http://localhost:3500/discord" }
+      );
       if (error) throw error;
     } catch (error: any) {
       toast.error(error.error_description || error.message, toastOptions);
