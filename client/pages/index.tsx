@@ -44,7 +44,6 @@ const Home: NextPage = () => {
    */
   const [discordAuthStatus, setDiscordAuthStatus] = useState<boolean>(false);
   useEffect(() => {
-    console.log("user:", user);
     if (user?.aud) {
       setDiscordAuthStatus(true);
     }
@@ -57,12 +56,9 @@ const Home: NextPage = () => {
   const handleDiscordAuth = async () => {
     try {
       setLoading(true);
-      const { user, session, error } = await supabase.auth.signIn(
-        {
-          provider: "discord",
-        },
-        { redirectTo: "http://localhost:3500/discord" }
-      );
+      const { user, session, error } = await supabase.auth.signIn({
+        provider: "discord",
+      });
       if (error) throw error;
     } catch (error: any) {
       toast.error(error.error_description || error.message, toastOptions);
