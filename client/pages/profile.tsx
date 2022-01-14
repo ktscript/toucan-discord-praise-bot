@@ -18,7 +18,7 @@ const Profile: NextPage<IfcProfilePageProps> = ({
   const router = useRouter();
   useEffect(() => {
     if (!authenticatedState) {
-      router.push("/?notLoggedIn=true");
+      router.push("/");
     }
   });
 
