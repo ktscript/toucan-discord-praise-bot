@@ -3,13 +3,13 @@ import connectWallet from "../utils/connectWallet";
 import signIn from "../utils/signIn";
 import { supabase } from "../utils/supabaseClient";
 
-export const DiscordAuthBtn = ({}) => {
+export const DiscordAuthBtn = ({ extraClasses }: { extraClasses?: string }) => {
   return (
     <button
       onClick={() => {
         signIn();
       }}
-      className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70"
+      className={`${extraClasses} inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70`}
     >
       <span className="mr-1">Sign in with Discord</span>
       <svg
@@ -25,7 +25,7 @@ export const DiscordAuthBtn = ({}) => {
   );
 };
 
-export const SignOutBtn = ({}) => {
+export const SignOutBtn = ({ extraClasses }: { extraClasses?: string }) => {
   async function signOut() {
     await supabase.auth.signOut();
     router.push("/");
@@ -35,7 +35,7 @@ export const SignOutBtn = ({}) => {
       onClick={() => {
         signOut();
       }}
-      className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70"
+      className={`${extraClasses} inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70`}
     >
       Sign out
     </button>
@@ -47,13 +47,17 @@ export const SignOutBtn = ({}) => {
  * @param authenticatedState is the app governed state that tells us wether the user has authenticated with Discord or not
  * @returns a JSX.Element that is a button which will be used to connect the crypto wallet of the user to his Supabase profile
  */
-export const WalletConnectBtn = () => {
+export const WalletConnectBtn = ({
+  extraClasses,
+}: {
+  extraClasses?: string;
+}) => {
   return (
     <button
       onClick={() => {
         connectWallet();
       }}
-      className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70"
+      className={`${extraClasses} inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70`}
     >
       Connect Wallet
     </button>

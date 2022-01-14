@@ -96,11 +96,8 @@ const Home: NextPage<IfcHomePageProps> = ({
                           Authenticate with Discord &amp; then connect your
                           wallet
                         </p>
-
                         <div className="mt-4">
-                          <div>
-                            <DiscordAuthBtn />
-                          </div>
+                          <DiscordAuthBtn extraClasses="w-full" />
                         </div>
                       </div>
                     </div>

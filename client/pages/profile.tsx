@@ -1,7 +1,8 @@
 import { NextPage } from "next";
-import { Head } from "next/document";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import { WalletConnectBtn } from "../components/Buttons";
 
 interface IfcProfilePageProps {
   authenticatedState: boolean;
@@ -16,8 +17,9 @@ const Profile: NextPage<IfcProfilePageProps> = ({
    */
   const router = useRouter();
   useEffect(() => {
-    if (authenticatedState) {
-      router.push("/profile");
+    console.log("profile page auth state:", authenticatedState);
+    if (!authenticatedState) {
+      router.push("/?notLoggedIn=true");
     }
   });
 
@@ -31,6 +33,8 @@ const Profile: NextPage<IfcProfilePageProps> = ({
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <p>All you need to do now is connect your wallet</p>
+      <WalletConnectBtn />
     </div>
   );
 };
