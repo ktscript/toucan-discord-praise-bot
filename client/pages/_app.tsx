@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import handleAuthChange from "../utils/handleAuthChange";
 import fetchProfile from "../utils/fetchProfile";
-import toastOptions from "../utils/toastOptions";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
@@ -42,12 +41,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       setAuthenticatedState(true);
     }
   }
-
-  useEffect(() => {
-    if (router.query.notLoggedIn) {
-      toast.error("Not logged in", toastOptions);
-    }
-  });
 
   return (
     <div>

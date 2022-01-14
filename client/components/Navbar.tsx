@@ -7,9 +7,7 @@ import { DiscordAuthBtn, SignOutBtn } from "../components/Buttons";
 import "react-toastify/dist/ReactToastify.css";
 
 const navigation = [
-  { name: "Products", href: "https://toucan.earth/#products" },
-  { name: "Docs", href: "https://docs.toucan.earth/" },
-  { name: "Toucan App", href: "https://toucan.earth/bridge" },
+  { name: "Home", href: "/" },
   { name: "Discord", href: "https://discord.gg/cDbWuZKWxe" },
 ];
 
@@ -19,7 +17,6 @@ const navigation = [
  * @returns a conditionally rendered JSX.Element that is the navbar
  */
 const Navbar = ({ authenticatedState }: { authenticatedState: boolean }) => {
-  console.log("navbar auth state:", authenticatedState);
   return (
     <Popover>
       <nav
