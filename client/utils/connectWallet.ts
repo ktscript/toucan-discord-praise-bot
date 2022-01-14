@@ -10,12 +10,8 @@ import toastOptions from "./toastOptions";
  * @description Attempts to connect to the MetaMask wallet and insert the discordToWalletConnection in dB
  * @returns nothing, it notifys us of the result with Toastify
  */
-const connectWallet = async (authenticatedState: boolean) => {
+const connectWallet = async () => {
   try {
-    if (authenticatedState) {
-      throw new Error("You are not authenticated");
-    }
-
     // @ts-ignore
     const { ethereum } = window;
     if (!ethereum) {

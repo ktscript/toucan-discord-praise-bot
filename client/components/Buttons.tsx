@@ -47,11 +47,11 @@ export const SignOutBtn = ({}) => {
  * @param authenticatedState is the app governed state that tells us wether the user has authenticated with Discord or not
  * @returns a JSX.Element that is a button which will be used to connect the crypto wallet of the user to his Supabase profile
  */
-export const WalletConnectBtn = (authenticatedState: boolean) => {
+export const WalletConnectBtn = () => {
   return (
     <button
       onClick={() => {
-        connectWallet(authenticatedState);
+        connectWallet();
       }}
       className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70"
     >

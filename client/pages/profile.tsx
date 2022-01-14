@@ -1,9 +1,26 @@
 import { NextPage } from "next";
 import { Head } from "next/document";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
+
+interface IfcProfilePageProps {
+  authenticatedState: boolean;
+}
 
 // TODO make a page to save wallet in Supabase
-const Profile: NextPage = () => {
+const Profile: NextPage<IfcProfilePageProps> = ({
+  authenticatedState,
+}: IfcProfilePageProps) => {
+  /**
+   * if the user is not logged in I want to redirect him to the home page
+   */
+  const router = useRouter();
+  useEffect(() => {
+    if (authenticatedState) {
+      router.push("/profile");
+    }
+  });
+
   return (
     <div>
       <Head>
