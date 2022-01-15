@@ -22,27 +22,23 @@ client.on("messageCreate", (msg: Message) => {
   const reader = parsed.reader;
 
   /**
-   * TODO make a way to connect to wallet (Metamask + Walletconnect)
+   * Now users can connect their Metamask wallets.
    *
-   * My basic idea of how I will do this?
-   * 1. User uses the !connect command and gets send to a Next.js app
-   * 2. User authenticates his wallet in the Next.js app
-   * 3. Next.js app stores the link between the wallet address and the Discord ID in one of 2 ways:
-   *    a. a Supabase dB
-   *    b. a mapping within ToucanPraiseToken.sol
-   * * Decided to use Supabase because it comes with a pre-made Discord auth making my life easier
+   * TODO: We need a way to regularly check each discord ID
+   * whether they have connected a wallet and how many ToucanPraiseTokens they have. This may be resource-intensive
+   * and I'm wondering if there is a better way.
    *
-   * 4. An interval will be set to check each discord ID whether they have connected a wallet and how many ToucanPraiseTokens they have
-   * 5. Based on what the check returns, we can take different actions like:
+   *
+   * TODO: Based on what the check returns, we can take different actions like:
    *    a. Let non-connected people know they should connect
    *    b. Change their role/emoji/nickname based on their TPT (ToucanPraiseToken) balance
    *
-   * Extras:
-   *
-   * - user should be able to manage his wallet connections from the Next.js app (change his wallet, etc)
+   * TODO: have the !praise command call the praise method from the contract.
+   * It's very important to handle the situation where we do not have the target's address.
    */
 
   if (parsed.command === "connect") {
+    // TODO: handle situation where user already connected his wallet
     console.log("Connect attempted");
     msg.reply(`You want to connect your wallet? Go to ${clientUrl}`);
   }
@@ -68,8 +64,6 @@ client.on("messageCreate", (msg: Message) => {
         "Empty praise! Please tag someone or create a messaged that has the 'for' keyword before it."
       );
     } else {
-      // TODO use the praise method from the contract upon the target's address
-      // it's very important to handle the situation where we do not have the target's address
       console.log(praise);
       msg.reply("Thanks for praising!");
     }
