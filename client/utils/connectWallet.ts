@@ -8,9 +8,10 @@ import toastOptions from "./toastOptions";
 
 /**
  * @description Attempts to connect to the MetaMask wallet and insert the discordToWalletConnection in dB
- * @returns nothing, it notifys us of the result with Toastify
+ * @returns nothing, it notifiess us of the result with Toastify
  */
 const connectWallet = async () => {
+  // TODO: I want to be able to use WalletConnect too
   try {
     // @ts-ignore
     const { ethereum } = window;
