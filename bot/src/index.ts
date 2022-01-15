@@ -34,7 +34,9 @@ client.on("messageCreate", (msg: Message) => {
    *    b. Change their role/emoji/nickname based on their TPT (ToucanPraiseToken) balance
    *
    * TODO: have the !praise command call the praise method from the contract.
-   * It's very important to handle the situation where we do not have the target's address.
+   * It's very important to handle the situations where
+   * - we do not have the target's address;
+   * - it was a praise without a target.
    */
 
   if (parsed.command === "connect") {
