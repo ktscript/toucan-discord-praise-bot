@@ -28,7 +28,6 @@ client.on("messageCreate", (msg: Message) => {
    * whether they have connected a wallet and how many ToucanPraiseTokens they have. This may be resource-intensive
    * and I'm wondering if there is a better way.
    *
-   *
    * TODO: Based on what the check returns, we can take different actions like:
    *    a. Let non-connected people know they should connect
    *    b. Change their role/emoji/nickname based on their TPT (ToucanPraiseToken) balance
