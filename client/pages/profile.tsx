@@ -1,38 +1,47 @@
-import { NextPage } from "next";
+import { User } from "@supabase/supabase-js";
+import { NextApiRequest, NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { WalletConnectBtn, WalletDeleteBtn } from "../components/Buttons";
+import Loader from "../components/Loader";
 import fetchWallet from "../utils/fetchWallet";
 import discordToWalletConnection from "../utils/ifcDiscordtoWalletConnection";
+import { supabase } from "../utils/supabaseClient";
 
 interface IfcProfilePageProps {
-  authenticatedState: boolean;
+  user: User;
+}
+
+export async function getServerSideProps({ req }: { req: NextApiRequest }) {
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+  // if the user is not logged in I want to redirect him to the home page from the server side
+  if (!user) {
+    return { props: {}, redirect: { destination: "/" } };
+  }
+
+  return { props: { user } };
 }
 
 // TODO make a page to save wallet in Supabase
 const Profile: NextPage<IfcProfilePageProps> = ({
-  authenticatedState,
+  user,
 }: IfcProfilePageProps) => {
-  const router = useRouter();
   const [wallet, setWallet] = useState<discordToWalletConnection | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // if the user is not logged in I want to redirect him to the home page
-    if (!authenticatedState) {
-      router.push("/");
-    }
-
     (async () => {
+      setLoading(true);
       setWallet(await fetchWallet());
+      setLoading(false);
     })();
-
-    // TODO stop potential memory leaks
-    const controller = new AbortController();
-    return () => controller.abort();
   }, []);
 
-  // TODO I need to make sure that after I connect or delete the wallet, the page gets re-rendered
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div>
@@ -44,17 +53,102 @@ const Profile: NextPage<IfcProfilePageProps> = ({
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {wallet ? (
-        <>
-          <p>You are connected with this wallet: {wallet.wallet_address}</p>
-          <WalletDeleteBtn />
-        </>
-      ) : (
-        <>
-          <p>All you need to do now is connect your wallet</p>
-          <WalletConnectBtn />
-        </>
-      )}
+      <main className="max-w-lg mx-auto pt-10 pb-12 px-4 lg:pb-16">
+        <form>
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-lg leading-6 font-medium text-gray-900">
+                Your profile
+              </h1>
+              <p className="mt-1 text-sm text-gray-500">
+                You can see your profile and connect your wallet in here.
+              </p>
+            </div>
+
+            <div>
+              <label
+                htmlFor="project-name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Photo (from Discord)
+              </label>
+              <div className="mt-1 text-sm text-gray-500">
+                <Image
+                  className="inline-block h-12 w-12 rounded-full"
+                  height={48}
+                  width={48}
+                  src={user.user_metadata.avatar_url}
+                  alt="Your profile image sourced from Discord"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="project-name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Full name
+              </label>
+              <div className="mt-1 text-sm text-gray-500">
+                {user.user_metadata.full_name}
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="project-name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email
+              </label>
+              <div className="mt-1 text-sm text-gray-500">{user.email}</div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="project-name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                User ID
+              </label>
+              <div className="mt-1 text-sm text-gray-500">{user.id}</div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="project-name"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Discord ID
+              </label>
+              <div className="mt-1 text-sm text-gray-500">
+                {user.user_metadata.provider_id}
+              </div>
+            </div>
+
+            {wallet ? (
+              <div>
+                <label
+                  htmlFor="project-name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Wallet Address
+                </label>
+                <div className="mt-1 text-sm text-gray-500">
+                  {wallet.wallet_address}
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+
+            <div className="flex justify-end">
+              {wallet ? <WalletDeleteBtn /> : <WalletConnectBtn />}
+            </div>
+          </div>
+        </form>
+      </main>
     </div>
   );
 };

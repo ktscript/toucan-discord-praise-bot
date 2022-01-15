@@ -8,12 +8,13 @@ import toastOptions from "./toastOptions";
  * @returns the walletToDiscordConnection object or null; also notifys us of the result with Toastify
  */
 const fetchWallet = async (): Promise<discordToWalletConnection | null> => {
+  // TODO this function works on the client but not on the server, no idea why
   try {
     const { data, error } = await supabase
       .from<discordToWalletConnection>("discordToWalletConnections")
       .select();
     if (error) throw error;
-    if (data) return data[0];
+    if (data && data.length > 0) return data[0];
     return null;
   } catch (error: any) {
     toast.error(error.message, toastOptions);
