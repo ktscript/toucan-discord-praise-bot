@@ -49,7 +49,7 @@ const Home: NextPage<IfcHomePageProps> = ({
                     <Link href="https://toucan-protocol.notion.site/Onboarding-ea467f8f713e43ad8bb396e69ad2ecf7">
                       <a className="inline-flex items-center text-black bg-gray-200 rounded-full p-1 pr-2 sm:text-base lg:text-sm xl:text-base hover:opacity-70">
                         <span className="px-3 py-0.5 text-white text-xs font-semibold leading-5 uppercase tracking-wide bg-green-600 rounded-full">
-                          We're hiring
+                          We&lsquo;re hiring
                         </span>
                         <span className="ml-4 text-sm">
                           Visit our contributor onboarding page
