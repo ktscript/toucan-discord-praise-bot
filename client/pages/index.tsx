@@ -22,7 +22,7 @@ const Home: NextPage<IfcHomePageProps> = ({
     if (authenticatedState) {
       router.push("/profile");
     }
-  });
+  }, []);
 
   return (
     <div>

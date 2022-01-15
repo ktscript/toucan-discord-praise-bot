@@ -28,7 +28,7 @@ const connectWallet = async () => {
       method: "eth_requestAccounts",
     });
 
-    const user = fetchProfile();
+    const user = await fetchProfile();
 
     const { data, error } = await supabase
       .from<discordToWalletConnection>("discordToWalletConnections")

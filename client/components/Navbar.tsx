@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const navigation = [
   { name: "Home", href: "/" },
+  { name: "Profile", href: "/profile" },
   { name: "Discord", href: "https://discord.gg/cDbWuZKWxe" },
 ];
 
@@ -40,13 +41,11 @@ const Navbar = ({ authenticatedState }: { authenticatedState: boolean }) => {
           </div>
           <div className="hidden space-x-10 md:flex md:ml-10">
             {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="font-medium text-black hover:opacity-70"
-              >
-                {item.name}
-              </a>
+              <Link href={item.href} key={item.name}>
+                <a className="font-medium text-black hover:opacity-70">
+                  {item.name}
+                </a>
+              </Link>
             ))}
           </div>
         </div>

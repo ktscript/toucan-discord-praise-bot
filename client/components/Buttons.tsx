@@ -1,5 +1,7 @@
 import router from "next/router";
 import connectWallet from "../utils/connectWallet";
+import deleteWallet from "../utils/deleteWallet";
+import fetchWallet from "../utils/fetchWallet";
 import signIn from "../utils/signIn";
 import { supabase } from "../utils/supabaseClient";
 
@@ -42,11 +44,6 @@ export const SignOutBtn = ({ extraClasses }: { extraClasses?: string }) => {
   );
 };
 
-/**
- *
- * @param authenticatedState is the app governed state that tells us wether the user has authenticated with Discord or not
- * @returns a JSX.Element that is a button which will be used to connect the crypto wallet of the user to his Supabase profile
- */
 export const WalletConnectBtn = ({
   extraClasses,
 }: {
@@ -54,12 +51,29 @@ export const WalletConnectBtn = ({
 }) => {
   return (
     <button
-      onClick={() => {
-        connectWallet();
+      onClick={async () => {
+        await connectWallet();
       }}
       className={`${extraClasses} inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70`}
     >
       Connect Wallet
+    </button>
+  );
+};
+
+export const WalletDeleteBtn = ({
+  extraClasses,
+}: {
+  extraClasses?: string;
+}) => {
+  return (
+    <button
+      onClick={async () => {
+        await deleteWallet();
+      }}
+      className={`${extraClasses} inline-flex justify-center py-2 px-4 rounded-md shadow-sm bg-red-600 text-sm font-medium text-white hover:opacity-70`}
+    >
+      Delete Wallet
     </button>
   );
 };
