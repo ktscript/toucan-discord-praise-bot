@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import { parse } from "discord-command-parser";
-import ifcPraise from "../utils/ifcPraise";
+import ifcPraise from "./utils/ifcPraise";
 require("dotenv").config();
 
 const Discord = require("discord.js");

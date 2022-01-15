@@ -5,7 +5,7 @@
     "strict": true,
     "esModuleInterop": true,
     "outDir": "dist",
-    "rootDirs": ["src", "tests"],
+    "rootDir": "src",
 
     /* Experimental Options */
     "experimentalDecorators": true,
