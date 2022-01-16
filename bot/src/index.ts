@@ -10,7 +10,6 @@ const clientUrl: string = process.env.CLIENT_URL || "";
 
 discord.on("ready", () => {
   console.log("Bot Online! Woohooo!");
-  discord.messageCreate("Bot Online! Woohooo!");
 });
 
 /**
