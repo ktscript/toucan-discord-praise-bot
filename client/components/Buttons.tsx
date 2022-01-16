@@ -9,19 +9,20 @@ import { supabase } from "../utils/supabaseClient";
 interface ifcLinkBtnProps {
   extraClasses?: string;
   to: string;
+  children: string;
 }
 
 interface ifcBtnProps {
   extraClasses?: string;
 }
 
-export const LinkBtn = ({ extraClasses, to }: ifcLinkBtnProps) => {
+export const LinkBtn = ({ extraClasses, to, children }: ifcLinkBtnProps) => {
   return (
     <Link href={to}>
       <a
         className={`${extraClasses} inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70`}
       >
-        Sign out
+        {children}
       </a>
     </Link>
   );

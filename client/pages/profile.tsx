@@ -152,7 +152,10 @@ const Profile: NextPage<IfcProfilePageProps> = ({
                 <>
                   <LinkBtn
                     to={process.env.NEXT_PUBLIC_DISCORD_SERVER_URL || "/"}
-                  />
+                    extraClasses="mr-2"
+                  >
+                    Go to our discord
+                  </LinkBtn>
                   <WalletDeleteBtn />
                 </>
               ) : (
