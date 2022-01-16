@@ -1,3 +1,4 @@
+import Link from "next/link";
 import router from "next/router";
 import connectWallet from "../utils/connectWallet";
 import deleteWallet from "../utils/deleteWallet";
@@ -5,7 +6,28 @@ import fetchWallet from "../utils/fetchWallet";
 import signIn from "../utils/signIn";
 import { supabase } from "../utils/supabaseClient";
 
-export const DiscordAuthBtn = ({ extraClasses }: { extraClasses?: string }) => {
+interface ifcLinkBtnProps {
+  extraClasses?: string;
+  to: string;
+}
+
+interface ifcBtnProps {
+  extraClasses?: string;
+}
+
+export const LinkBtn = ({ extraClasses, to }: ifcLinkBtnProps) => {
+  return (
+    <Link href={to}>
+      <a
+        className={`${extraClasses} inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70`}
+      >
+        Sign out
+      </a>
+    </Link>
+  );
+};
+
+export const DiscordAuthBtn = ({ extraClasses }: ifcBtnProps) => {
   return (
     <button
       onClick={() => {
@@ -27,7 +49,7 @@ export const DiscordAuthBtn = ({ extraClasses }: { extraClasses?: string }) => {
   );
 };
 
-export const SignOutBtn = ({ extraClasses }: { extraClasses?: string }) => {
+export const SignOutBtn = ({ extraClasses }: ifcBtnProps) => {
   async function signOut() {
     await supabase.auth.signOut();
     router.push("/");
@@ -44,11 +66,7 @@ export const SignOutBtn = ({ extraClasses }: { extraClasses?: string }) => {
   );
 };
 
-export const WalletConnectBtn = ({
-  extraClasses,
-}: {
-  extraClasses?: string;
-}) => {
+export const WalletConnectBtn = ({ extraClasses }: ifcBtnProps) => {
   return (
     <button
       onClick={async () => {
@@ -61,11 +79,7 @@ export const WalletConnectBtn = ({
   );
 };
 
-export const WalletDeleteBtn = ({
-  extraClasses,
-}: {
-  extraClasses?: string;
-}) => {
+export const WalletDeleteBtn = ({ extraClasses }: ifcBtnProps) => {
   return (
     <button
       onClick={async () => {

@@ -4,7 +4,11 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { WalletConnectBtn, WalletDeleteBtn } from "../components/Buttons";
+import {
+  LinkBtn,
+  WalletConnectBtn,
+  WalletDeleteBtn,
+} from "../components/Buttons";
 import Loader from "../components/Loader";
 import fetchWallet from "../utils/fetchWallet";
 import discordToWalletConnection from "../utils/ifcDiscordtoWalletConnection";
@@ -144,7 +148,16 @@ const Profile: NextPage<IfcProfilePageProps> = ({
             )}
 
             <div className="flex justify-end">
-              {wallet ? <WalletDeleteBtn /> : <WalletConnectBtn />}
+              {wallet ? (
+                <>
+                  <LinkBtn
+                    to={process.env.NEXT_PUBLIC_DISCORD_SERVER_URL || "/"}
+                  />
+                  <WalletDeleteBtn />
+                </>
+              ) : (
+                <WalletConnectBtn />
+              )}
             </div>
           </div>
         </form>
