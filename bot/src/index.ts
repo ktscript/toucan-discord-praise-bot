@@ -1,22 +1,18 @@
 import { Message } from "discord.js";
 import { parse } from "discord-command-parser";
 import ifcPraise from "./utils/ifcPraise";
+import { discord } from "./utils/discordClient";
+import { supabase } from "./utils/supabaseClient";
 require("dotenv").config();
 
-const Discord = require("discord.js");
-const client = new Discord.Client({
-  intents: ["GUILDS", "DIRECT_MESSAGES", "GUILD_MESSAGES"],
-  partials: ["MESSAGE", "CHANNEL"],
-});
-const discordToken = process.env.DISCORD_TOKEN;
 const PREFIX = "!";
-const clientUrl = process.env.CLIENT_URL;
+const clientUrl: string = process.env.CLIENT_URL || "";
 
-client.on("ready", () => {
+discord.on("ready", () => {
   console.log("Bot Online! Woohooo!");
 });
 
-client.on("messageCreate", (msg: Message) => {
+discord.on("messageCreate", (msg: Message) => {
   const parsed = parse(msg, "!");
   if (!parsed.success) return;
   const reader = parsed.reader;
@@ -41,6 +37,7 @@ client.on("messageCreate", (msg: Message) => {
   if (parsed.command === "connect") {
     // TODO: handle situation where user already connected his wallet
     console.log("Connect attempted");
+    msg.react("🌳");
     msg.reply(`You want to connect your wallet? Go to ${clientUrl}`);
   }
 
@@ -66,9 +63,10 @@ client.on("messageCreate", (msg: Message) => {
       );
     } else {
       console.log(praise);
-      msg.reply("Thanks for praising!");
+      msg.react("🌳");
     }
   }
 });
 
-client.login(discordToken);
+const discordToken: string = process.env.DISCORD_TOKEN || "";
+discord.login(discordToken);
