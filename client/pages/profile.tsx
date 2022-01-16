@@ -52,6 +52,8 @@ const Profile: NextPage<IfcProfilePageProps> = ({
     return <Loader />;
   }
 
+  return user;
+
   return (
     <div>
       <Head>
