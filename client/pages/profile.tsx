@@ -52,6 +52,11 @@ const Profile: NextPage<IfcProfilePageProps> = ({
     return <Loader />;
   }
 
+  if (!user) {
+    console.log("USER:", user);
+    return <>!user</>;
+  }
+
   return (
     <div>
       <Head>
