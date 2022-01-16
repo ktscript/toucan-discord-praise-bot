@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import { DiscordAuthBtn } from "../components/Buttons";
 import { useEffect } from "react";
+import Loader from "../components/Loader";
 
 interface IfcHomePageProps {
   authenticatedState: boolean;
@@ -20,12 +21,12 @@ const Home: NextPage<IfcHomePageProps> = ({
    * if the user is logged in already I want to redirect him to his profile page
    */
   const router = useRouter();
-  useEffect(() => {
-    if (authenticatedState) {
-      console.log("authenticate state true, about to push /profile");
-      router.push("/profile");
-    }
-  }, []);
+
+  if (authenticatedState) {
+    console.log("authenticate state true, about to push /profile");
+    router.push("/profile");
+    return <Loader />;
+  }
 
   return (
     <div>
