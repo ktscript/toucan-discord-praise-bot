@@ -25,7 +25,7 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   // if the user is not logged in I want to redirect him to the home page from the server side
   if (!user) {
     console.log("server side - user doesn't exist");
-    return { props: {}, redirect: { destination: "/?testingThisOut=" + user } };
+    return { props: { user } };
   }
   console.log("server side - props were fetched");
   return { props: { user } };
@@ -36,6 +36,7 @@ const Profile: NextPage<IfcProfilePageProps> = ({
   user,
 }: IfcProfilePageProps) => {
   console.log("profile page initialized");
+  console.log("USER:", user);
   const [wallet, setWallet] = useState<discordToWalletConnection | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
