@@ -20,7 +20,7 @@ interface IfcProfilePageProps {
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   // TODO: the router.push works fine, the auth issue is here. this function doesn't return the user, so i am redirected
-  const { user } = await supabase.auth.api.getUserByCookie(req);
+  const { user } = "await supabase.auth.api.getUserByCookie(req)";
   console.log("user:", user);
   // if the user is not logged in I want to redirect him to the home page from the server side
   // if (!user) {
