@@ -19,14 +19,14 @@ interface IfcProfilePageProps {
 }
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
-  // TODO: or maybe the auth issue is here? because if I go myself to /profile it send me back to /
+  // TODO: the router.push works fine, the auth issue is here. this function doesn't return the user, so i am redirected
   const { user } = await supabase.auth.api.getUserByCookie(req);
   console.log("user:", user);
   // if the user is not logged in I want to redirect him to the home page from the server side
-  if (!user) {
-    console.log("server side - user doesn't exist");
-    return { props: {}, redirect: { destination: "/?testingThisOut=" + user } };
-  }
+  // if (!user) {
+  //   console.log("server side - user doesn't exist");
+  //   return { props: {}, redirect: { destination: "/?testingThisOut=" + user } };
+  // }
   console.log("server side - props were fetched");
   return { props: { user } };
 }
@@ -35,6 +35,7 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
 const Profile: NextPage<IfcProfilePageProps> = ({
   user,
 }: IfcProfilePageProps) => {
+  console.log("user:", user);
   console.log("profile page initialized");
   const [wallet, setWallet] = useState<discordToWalletConnection | null>(null);
   const [loading, setLoading] = useState<boolean>(false);

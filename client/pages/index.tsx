@@ -24,7 +24,6 @@ const Home: NextPage<IfcHomePageProps> = ({
 
   if (authenticatedState) {
     console.log("authenticate state true, about to push /profile");
-    // TODO: this is why my auth is broken, because the router.push, for some reason does not work
     router.push("/profile");
     return <Loader />;
   }
