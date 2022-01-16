@@ -10,6 +10,7 @@ import handleAuthChange from "../utils/handleAuthChange";
 import fetchProfile from "../utils/fetchProfile";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  console.log("app initialized");
   const router = useRouter();
   const [authenticatedState, setAuthenticatedState] = useState<boolean>(false);
 
@@ -18,10 +19,12 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       (event, session) => {
         handleAuthChange(event, session);
         if (event === "SIGNED_IN") {
+          console.log("signed in event");
           setAuthenticatedState(true);
           router.push("/profile");
         }
         if (event === "SIGNED_OUT") {
+          console.log("sign out event");
           setAuthenticatedState(false);
           router.push("/");
         }
@@ -32,12 +35,15 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       // TODO: check this out
       // @ts-ignore
       authListener.unsubscribe();
+      console.log("auth listener unsubscribe");
     };
   }, []);
 
   async function checkUser() {
+    console.log("user check ran");
     const profile = await fetchProfile();
     if (profile) {
+      console.log("profile existed upon checking user");
       setAuthenticatedState(true);
     }
   }

@@ -7,12 +7,14 @@ import toastOptions from "./toastOptions";
  * @returns nothing, it notifys us with Toastify if there was an error
  */
 const signIn = async () => {
+  console.log("attempting to sign in");
   try {
     const { user, session, error } = await supabase.auth.signIn({
       provider: "discord",
     });
     if (error) throw error;
   } catch (error: any) {
+    console.error("error when signing in", error);
     toast.error(error.error_description || error.message, toastOptions);
   }
 };

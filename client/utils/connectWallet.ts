@@ -11,6 +11,7 @@ import toastOptions from "./toastOptions";
  * @returns nothing, it notifiess us of the result with Toastify
  */
 const connectWallet = async () => {
+  console.log("attempting to connect to the MetaMask wallet");
   // TODO: I want to be able to use WalletConnect too
   try {
     // @ts-ignore
@@ -46,6 +47,7 @@ const connectWallet = async () => {
 
     toast(`Connected your wallet`, toastOptions);
   } catch (error: any) {
+    console.error("error when connecting wallet", error);
     toast.error(error.message, toastOptions);
   }
 };

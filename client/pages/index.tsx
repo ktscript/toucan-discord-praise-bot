@@ -15,12 +15,14 @@ interface IfcHomePageProps {
 const Home: NextPage<IfcHomePageProps> = ({
   authenticatedState,
 }: IfcHomePageProps) => {
+  console.log("home page initialized");
   /**
    * if the user is logged in already I want to redirect him to his profile page
    */
   const router = useRouter();
   useEffect(() => {
     if (authenticatedState) {
+      console.log("will push to /profile");
       router.push("/profile");
     }
   }, []);

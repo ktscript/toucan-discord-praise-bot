@@ -8,6 +8,7 @@ import toastOptions from "./toastOptions";
  * @returns the walletToDiscordConnection object or null; also notifys us of the result with Toastify
  */
 const deleteWallet = async (): Promise<discordToWalletConnection | null> => {
+  console.log("attempting to delete wallet");
   try {
     const { data, error } = await supabase
       .from<discordToWalletConnection>("discordToWalletConnections")
@@ -16,6 +17,7 @@ const deleteWallet = async (): Promise<discordToWalletConnection | null> => {
     if (data) return data[0];
     return null;
   } catch (error: any) {
+    console.error("error deleting wallet", error);
     toast.error(error.message, toastOptions);
     return null;
   }
