@@ -13,7 +13,7 @@ const PREFIX = "!";
 const clientUrl = process.env.CLIENT_URL;
 
 client.on("ready", () => {
-  console.log("Bot Online! Woohoo!");
+  console.log("Bot Online! Woohooo!");
 });
 
 client.on("messageCreate", (msg: Message) => {
