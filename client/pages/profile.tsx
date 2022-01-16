@@ -19,11 +19,13 @@ interface IfcProfilePageProps {
 }
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
+  // TODO: or maybe the auth issue is here? because if I go myself to /profile it send me back to /
   const { user } = await supabase.auth.api.getUserByCookie(req);
+  console.log("user:", user);
   // if the user is not logged in I want to redirect him to the home page from the server side
   if (!user) {
     console.log("server side - user doesn't exist");
-    return { props: {}, redirect: { destination: "/" } };
+    return { props: {}, redirect: { destination: "/?testingThisOut=" + user } };
   }
   console.log("server side - props were fetched");
   return { props: { user } };
