@@ -18,7 +18,7 @@ interface IfcProfilePageProps {
   user: User;
 }
 
-export async function getServerSideProps({ req }: { req: NextApiRequest }) {
+export async function getServerSideProps() {
   // TODO: the router.push works fine, the auth issue is here. this function doesn't return the user, so i am redirected
   const { user } = "await supabase.auth.api.getUserByCookie(req)";
   console.log("user:", user);
