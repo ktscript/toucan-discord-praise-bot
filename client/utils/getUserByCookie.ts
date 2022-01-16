@@ -8,6 +8,7 @@ interface ifcUserByCookie {
 // this function replaces the broken supabase.auth.api.getUserByCookie()
 const getUserByCookie = async (req: any): Promise<ifcUserByCookie> => {
   let token = req.cookies["sb:token"];
+  console.log("req.cookies", req.cookies);
   if (!token) {
     return {
       user: null,
