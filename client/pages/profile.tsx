@@ -10,18 +10,22 @@ import {
   WalletDeleteBtn,
 } from "../components/Buttons";
 import Loader from "../components/Loader";
-import fetchProfile from "../utils/fetchProfile";
 import fetchWallet from "../utils/fetchWallet";
 import discordToWalletConnection from "../utils/ifcDiscordtoWalletConnection";
 import { supabase } from "../utils/supabaseClient";
 
 interface IfcProfilePageProps {
+  token: string;
   user: User;
+  data: User;
+  error: ApiError;
 }
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   // TODO: for some reason this function returns null (only in production) regardless of the fact that the user is authenticated
-  const user = await fetchProfile();
+  const { token, user, data, error } = await supabase.auth.api.getUserByCookie(
+    req
+  );
   console.log("user:", user);
   // if the user is not logged in I want to redirect him to the home page from the server side
   if (!user) {
@@ -29,14 +33,20 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
     return { props: { user } };
   }
   console.log("server side - props were fetched");
-  return { props: { user } };
+  return { props: { token, user, data, error } };
 }
 
 // TODO make a page to save wallet in Supabase
 const Profile: NextPage<IfcProfilePageProps> = ({
+  token,
   user,
+  data,
+  error,
 }: IfcProfilePageProps) => {
+  console.log("TOKEN:", token);
   console.log("USER:", user);
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
   const [wallet, setWallet] = useState<discordToWalletConnection | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
