@@ -1,4 +1,4 @@
-import { User } from "@supabase/supabase-js";
+import { ApiError, User } from "@supabase/supabase-js";
 import { NextApiRequest, NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -15,12 +15,17 @@ import discordToWalletConnection from "../utils/ifcDiscordtoWalletConnection";
 import { supabase } from "../utils/supabaseClient";
 
 interface IfcProfilePageProps {
+  token: string;
   user: User;
+  data: User;
+  error: ApiError;
 }
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
-  // TODO: the router.push works fine, the auth issue is here. this function doesn't return the user, so i am redirected
-  const { user } = await supabase.auth.api.getUserByCookie(req);
+  // TODO: for some reason this function returns null (only in production) regardless of the fact that the user is authenticated
+  const { token, user, data, error } = await supabase.auth.api.getUserByCookie(
+    req
+  );
   console.log("user:", user);
   // if the user is not logged in I want to redirect him to the home page from the server side
   if (!user) {
@@ -28,12 +33,15 @@ export async function getServerSideProps({ req }: { req: NextApiRequest }) {
     return { props: { user } };
   }
   console.log("server side - props were fetched");
-  return { props: { user } };
+  return { props: { token, user, data, error } };
 }
 
 // TODO make a page to save wallet in Supabase
 const Profile: NextPage<IfcProfilePageProps> = ({
+  token,
   user,
+  data,
+  error,
 }: IfcProfilePageProps) => {
   console.log("profile page initialized");
   console.log("USER:", user);
