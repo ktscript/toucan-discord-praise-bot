@@ -43,8 +43,10 @@ const Profile: NextPage<IfcProfilePageProps> = ({
   data,
   error,
 }: IfcProfilePageProps) => {
-  console.log("profile page initialized");
+  console.log("TOKEN:", token);
   console.log("USER:", user);
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
   const [wallet, setWallet] = useState<discordToWalletConnection | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
