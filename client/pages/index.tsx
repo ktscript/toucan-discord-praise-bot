@@ -22,7 +22,7 @@ const Home: NextPage<IfcHomePageProps> = ({
   const router = useRouter();
   useEffect(() => {
     if (authenticatedState) {
-      console.log("will push to /profile");
+      console.log("authenticate state true, about to push /profile");
       router.push("/profile");
     }
   }, []);

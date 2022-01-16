@@ -52,6 +52,7 @@ export const DiscordAuthBtn = ({ extraClasses }: ifcBtnProps) => {
 
 export const SignOutBtn = ({ extraClasses }: ifcBtnProps) => {
   async function signOut() {
+    console.log("signing out... about to push /");
     await supabase.auth.signOut();
     router.push("/");
   }

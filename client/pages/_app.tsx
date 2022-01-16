@@ -19,12 +19,12 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       (event, session) => {
         handleAuthChange(event, session);
         if (event === "SIGNED_IN") {
-          console.log("signed in event");
+          console.log("signed in event... about to push /profile");
           setAuthenticatedState(true);
           router.push("/profile");
         }
         if (event === "SIGNED_OUT") {
-          console.log("sign out event");
+          console.log("sign out event... about to push /");
           setAuthenticatedState(false);
           router.push("/");
         }
