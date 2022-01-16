@@ -4,6 +4,7 @@ import ifcPraise from "./ifcPraise";
 /**
  * TODO: have the !praise command call the praise method from the contract.
  * It's important to handle the situations where
+ * - we do not have the praisers address
  * - we do not have the target's address;
  * - it was a praise without a target.
  *

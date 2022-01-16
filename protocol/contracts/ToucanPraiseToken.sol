@@ -19,12 +19,22 @@ contract ToucanPraiseToken is ERC20 {
         /**
         * It's important to think of your praiseToken balance as your reputation.
         */
+        /**
+         * TODO: this may become an issue, because, the way I've made the auth system, I believe that 
+         * we will be minting/praising from a central wallet that the bot has access to as the bot has only read access to 
+         * the user's wallet. With that in mind, I may need to add an extra param (the address of the praisee), which will 
+         * be used to check the reputation of the person that praised.
+         */
         uint256 reputation = balanceOf(msg.sender);
 
         /**
         * This makes the praise have a worth based on who praised.
         * If someone more reputable praises, then the praise will be worth more.
         */
+        /**
+         * TODO: I think if we should make sure this is a minimum of 1, 
+         * so that if someone has 0 reputation he can still praise
+         */
         uint256 praiseWorth = reputation / 10;
 
         /**
