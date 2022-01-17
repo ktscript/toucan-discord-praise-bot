@@ -11,7 +11,6 @@ import { Loader } from "../components/Modals";
 interface IfcHomePageProps {
   authenticatedState: boolean;
 }
-// TODO: somehow the auth is broken on the live site, not on my local machine
 
 const Home: NextPage<IfcHomePageProps> = ({
   authenticatedState,

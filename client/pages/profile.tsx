@@ -34,7 +34,6 @@ const Profile: NextPage = () => {
   }
 
   if (!user) {
-    // TODO make a modal that says "yo, not logged in, click here to log in"
     return <NotLoggedInModal />;
   }
 

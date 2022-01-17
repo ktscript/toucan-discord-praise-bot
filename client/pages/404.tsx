@@ -2,7 +2,6 @@ import { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 
-// TODO make a 404 page
 const Error: NextPage = () => {
   return (
     <>
