@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import { DiscordAuthBtn } from "../components/Buttons";
 import { useEffect } from "react";
-import Loader from "../components/Loader";
+import { Loader } from "../components/Modals";
 
 interface IfcHomePageProps {
   authenticatedState: boolean;

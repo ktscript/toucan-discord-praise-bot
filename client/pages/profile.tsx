@@ -9,43 +9,21 @@ import {
   WalletConnectBtn,
   WalletDeleteBtn,
 } from "../components/Buttons";
-import Loader from "../components/Loader";
+import { Loader, NotLoggedInModal } from "../components/Modals";
 import fetchWallet from "../utils/fetchWallet";
 import getUserByCookie from "../utils/getUserByCookie";
 import discordToWalletConnection from "../utils/ifcDiscordtoWalletConnection";
 import { supabase } from "../utils/supabaseClient";
 
-interface IfcProfilePageProps {
-  user: User;
-  error: ApiError;
-}
-
-export async function getServerSideProps({ req }: { req: NextApiRequest }) {
-  // TODO: for some reason this function returns null (only in production) regardless of the fact that the user is authenticated
-  // I tried rebuilding it myself, to no avail. The issue, I've no idea what it is at this point...
-  const { user, error } = await supabase.auth.api.getUserByCookie(req);
-  console.log("user:", user);
-  // if the user is not logged in I want to redirect him to the home page from the server side
-  if (!user) {
-    console.log("server side - user doesn't exist");
-    return { props: { user } };
-  }
-  console.log("server side - props were fetched");
-  return { props: { user, error } };
-}
-
-const Profile: NextPage<IfcProfilePageProps> = ({
-  user,
-  error,
-}: IfcProfilePageProps) => {
-  console.log("USER:", user);
-  console.log("ERROR:", error);
+const Profile: NextPage = () => {
+  const [user, setUser] = useState<User | null>(null);
   const [wallet, setWallet] = useState<discordToWalletConnection | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
+      setUser(await supabase.auth.user());
       setWallet(await fetchWallet());
       setLoading(false);
     })();
@@ -56,8 +34,8 @@ const Profile: NextPage<IfcProfilePageProps> = ({
   }
 
   if (!user) {
-    console.log("USER:", user);
-    return <>!user</>;
+    // TODO make a modal that says "yo, not logged in, click here to log in"
+    return <NotLoggedInModal />;
   }
 
   return (
