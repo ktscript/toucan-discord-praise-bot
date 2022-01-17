@@ -22,7 +22,8 @@ interface IfcProfilePageProps {
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   // TODO: for some reason this function returns null (only in production) regardless of the fact that the user is authenticated
-  const { user, error } = await getUserByCookie(req);
+  // I tried rebuilding it myself, to no avail. The issue, I've no idea what it is at this point...
+  const { user, error } = await supabase.auth.api.getUserByCookie(req);
   console.log("user:", user);
   // if the user is not logged in I want to redirect him to the home page from the server side
   if (!user) {
