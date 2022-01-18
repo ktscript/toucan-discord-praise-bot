@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import { discord } from "../utils/discordClient";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
 import ifcPraise from "../utils/ifcPraise";
 import parsePraise from "../utils/parsePraise";
@@ -17,15 +18,18 @@ export const handlePraiseCommand = (
     `${msg.author.username} (ID: ${msg.author.id}) wants to praise!`;
     msg.react("🌳");
 
+    /**
+     * Parse the praise
+     */
     const praise: ifcPraise | null = parsePraise(parsed);
     if (!praise) {
       msg.reply("Unexpected error ocurred!");
-      throw new Error("Can't praise yourself!");
+      throw new Error("Praise couldn't be parsed!");
       return;
     }
 
     /**
-     * error message in case there are no praise targets
+     * Error message in case there are no praise targets
      */
     if (praise.praiseTargets.length === 0) {
       msg.reply(
@@ -37,7 +41,17 @@ export const handlePraiseCommand = (
       return;
     }
 
-    // TODO: check if user is trying to praise himself
+    /**
+     * Check if user is trying to praise himself
+     */
+    praise.praiseTargets.map((praiseTarget) => {
+      console.log(`Evaluating if (${praiseTarget} == ${msg.author.id}`);
+      if (praiseTarget == msg.author.id) {
+        msg.reply("Can't praise yourself!");
+        throw new Error("Can't praise yourself!");
+        return;
+      }
+    });
 
     /**
      * Check if the user that is trying to praise has his wallet connected

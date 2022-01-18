@@ -9,13 +9,14 @@ const parsePraise = (parsed: any): ifcPraise | null => {
      * loop over the parsed message, extract praise targets and praise reason
      */
     reader.args.some(() => {
+      if (reader.getUserID(true)) {
+        praise.praiseTargets.push(reader.getUserID());
+      }
+
       const arg = reader.getString();
 
-      if (!arg) throw new Error("Empty message");
+      if (!arg) return true;
 
-      if (arg && arg.includes("@")) {
-        praise.praiseTargets.push(arg);
-      }
       if (arg === "for") {
         praise.reason = "for " + reader.getRemaining();
         return true;

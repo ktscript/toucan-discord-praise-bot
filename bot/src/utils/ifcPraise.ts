@@ -1,4 +1,4 @@
 export default interface ifcPraise {
-  praiseTargets: string[];
+  praiseTargets: string[]; // these are discord IDs
   reason?: string;
 }
