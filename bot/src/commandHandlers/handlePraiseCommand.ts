@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import ifcPraise from "./ifcPraise";
+import ifcPraise from "../utils/ifcPraise";
 
 /**
  * TODO: have the !praise command call the praise method from the contract.
@@ -14,6 +14,7 @@ import ifcPraise from "./ifcPraise";
  */
 export const handlePraiseCommand = (parsed: any, msg: Message) => {
   try {
+    msg.react("🌳");
     const reader = parsed.reader;
     const praise: ifcPraise = { people: [] };
     reader.args.some(() => {
@@ -36,7 +37,6 @@ export const handlePraiseCommand = (parsed: any, msg: Message) => {
       );
     } else {
       console.log(praise);
-      msg.react("🌳");
     }
   } catch (error) {
     console.log(error);
