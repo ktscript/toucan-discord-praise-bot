@@ -15,6 +15,9 @@ contract ToucanPraiseToken is ERC20 {
     *
     * Mints & sends praiseTokens to an address
     */
+
+    // TODO: what if the praise has more praiseTargets?
+    // TODO: don't allow people to praise themselves
     function praise(address _to) public returns (bool) {
         /**
         * It's important to think of your praiseToken balance as your reputation.

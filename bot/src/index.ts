@@ -36,7 +36,7 @@ discord.on("messageCreate", (msg: Message) => {
   }
 
   if (parsed.command === "praise") {
-    handlePraiseCommand(parsed, msg);
+    handlePraiseCommand(parsed, msg, clientUrl);
   }
 });
 

@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import fetchWalletConnection from "../utils/fetchWalletConnection";
 import ifcPraise from "../utils/ifcPraise";
 
 /**
@@ -6,7 +7,11 @@ import ifcPraise from "../utils/ifcPraise";
  * @param parsed the message parsed by discord-command-parser used for readonly operations
  * @param msg the message object from discord.js used to reply, etc.
  */
-export const handlePraiseCommand = (parsed: any, msg: Message) => {
+export const handlePraiseCommand = (
+  parsed: any,
+  msg: Message,
+  clientUrl: string
+) => {
   try {
     `${msg.author.username} (ID: ${msg.author.id}) want to praise!`;
     msg.react("🌳");
@@ -43,7 +48,20 @@ export const handlePraiseCommand = (parsed: any, msg: Message) => {
       return;
     }
 
-    // TODO: check praisers walletConnection
+    // TODO: check if user is trying to praise himself
+
+    /**
+     * Check if the user that is trying to praise has his wallet connected
+     */
+    const praiserWalletConnection = async () =>
+      await fetchWalletConnection(msg.author.id);
+    if (!praiserWalletConnection) {
+      msg.reply(
+        `You need to connect your wallet before you can praise someone, go to ${clientUrl}`
+      );
+      throw new Error("Praiser doesn't have a wallet connection!");
+      return;
+    }
 
     // TODO: check praiseTargets' walletConnection(s)
 
