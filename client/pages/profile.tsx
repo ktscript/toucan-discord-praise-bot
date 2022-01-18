@@ -18,7 +18,7 @@ import { supabase } from "../utils/supabaseClient";
 const Profile: NextPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [wallet, setWallet] = useState<discordToWalletConnection | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     (async () => {
@@ -37,6 +37,7 @@ const Profile: NextPage = () => {
     return <NotLoggedInModal />;
   }
 
+  // TODO sometimes there are issues with connecting/deleting the wallet
   return (
     <div>
       <Head>

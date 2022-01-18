@@ -12,7 +12,6 @@ import toastOptions from "./toastOptions";
  */
 const connectWallet = async () => {
   console.log("attempting to connect to the MetaMask wallet");
-  // TODO: I want to be able to use WalletConnect too
   try {
     // @ts-ignore
     const { ethereum } = window;
