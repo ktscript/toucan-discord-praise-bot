@@ -1,4 +1,4 @@
 export default interface ifcPraise {
-  people: string[];
-  message?: string;
+  praiseTargets: string[];
+  reason?: string;
 }

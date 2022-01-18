@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 
 const handleHelpCommand = (msg: Message) => {
-  console.log(`${msg.author} needs help!`);
+  `${msg.author.username} (ID: ${msg.author.id}) needs help!`;
   msg.react("🌳");
   msg.reply(
     `Hey there, I'm the Praise Bot. Here's a list of the commands that you can use: ` +
