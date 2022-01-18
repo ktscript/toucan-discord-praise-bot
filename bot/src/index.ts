@@ -35,26 +35,6 @@ discord.on("messageCreate", (msg: Message) => {
     handleConnectCommand(msg, clientUrl);
   }
 
-  if (parsed.command === "profile") {
-    // TODO: tell user if he is connected (just discord, both, or neither)
-    console.log(`Profile requested for ${msg.author}`);
-    msg.react("🌳");
-    if ("discord connected")
-      msg.reply(
-        `Your discord is connected, but you forgot to connect your wallet. Go to ${clientUrl} to do it.`
-      );
-
-    if ("wallet connected")
-      msg.reply(
-        `You are happily connected with both your discord and your wallet. You can go to ${clientUrl} to change your wallet.`
-      );
-
-    if ("no connection")
-      msg.reply(
-        `We have nothin on you. Go to ${clientUrl} to connect your discord and wallet.`
-      );
-  }
-
   if (parsed.command === "praise") {
     handlePraiseCommand(parsed, msg);
   }
