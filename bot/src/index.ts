@@ -3,6 +3,9 @@ import { parse } from "discord-command-parser";
 import { discord } from "./utils/discordClient";
 import { supabase } from "./utils/supabaseClient";
 import { handlePraiseCommand } from "./commandHandlers/handlePraiseCommand";
+import discordToWalletConnection from "./utils/ifcDiscordtoWalletConnection";
+import fetchWalletConnection from "./utils/fetchWalletConnection";
+import handleConnectCommand from "./commandHandlers/handleConnectCommand";
 require("dotenv").config();
 
 const PREFIX = "!";
@@ -39,21 +42,7 @@ discord.on("messageCreate", (msg: Message) => {
   }
 
   if (parsed.command === "connect") {
-    // TODO: handle situation where user already connected his wallet
-    console.log(`${msg.author} requested to connect!`);
-    msg.react("🌳");
-    if ("discord and wallet") {
-      msg.reply(
-        `You are already connected with both your discord and wallet. But you can manage your profile here ${clientUrl}`
-      );
-    }
-    if ("discord, but no wallet") {
-      msg.reply(
-        `You have connected your discord already, but not your wallet. Go to ${clientUrl}`
-      );
-    }
-
-    msg.reply(`You want to connect your wallet? Go to ${clientUrl}`);
+    handleConnectCommand(msg, clientUrl);
   }
 
   if (parsed.command === "profile") {
