@@ -24,7 +24,6 @@ discord.on("messageCreate", (msg: Message) => {
   if (!parsed.success) return;
 
   if (parsed.command === "help") {
-    // TODO: a command that replies with all possible commands and an explanation of each
     console.log(`${msg.author} needs help!`);
     msg.react("🌳");
     msg.reply(
