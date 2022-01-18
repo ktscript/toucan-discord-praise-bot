@@ -1,24 +1,87 @@
 import { ApiError, User } from "@supabase/supabase-js";
+import { ethers } from "ethers";
 import { NextApiRequest, NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import {
-  LinkBtn,
-  WalletConnectBtn,
-  WalletDeleteBtn,
-} from "../components/Buttons";
+import { toast } from "react-toastify";
+import { LinkBtn } from "../components/Buttons";
 import { Loader, NotLoggedInModal } from "../components/Modals";
+import fetchProfile from "../utils/fetchProfile";
 import fetchWallet from "../utils/fetchWallet";
 import getUserByCookie from "../utils/getUserByCookie";
 import discordToWalletConnection from "../utils/ifcDiscordtoWalletConnection";
 import { supabase } from "../utils/supabaseClient";
+import toastOptions from "../utils/toastOptions";
 
 const Profile: NextPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [wallet, setWallet] = useState<discordToWalletConnection | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const deleteWallet = async () => {
+    console.log("attempting to delete wallet");
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from<discordToWalletConnection>("discordToWalletConnections")
+        .delete();
+      if (error) throw error;
+      toast("Wallet deleted successfully", toastOptions);
+      if (data) setWallet(null);
+      console.log("state of wallet:", wallet);
+    } catch (error: any) {
+      console.error("error deleting wallet", error);
+      toast.error(error.message, toastOptions);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const connectWallet = async () => {
+    console.log("attempting to connect to the MetaMask wallet");
+    try {
+      setLoading(true);
+      // @ts-ignore
+      const { ethereum } = window;
+      if (!ethereum) {
+        throw new Error("MetaMask not connected");
+      }
+
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const { chainId } = await provider.getNetwork();
+      if (chainId != 4) {
+        throw new Error("Make sure you are on Rinkeby Test Network.");
+      }
+
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      const user = await fetchProfile();
+
+      const { data, error } = await supabase
+        .from<discordToWalletConnection>("discordToWalletConnections")
+        .insert([
+          {
+            // @ts-ignore because if it's null it will simply return an error which is handled down below
+            user_id: user.id,
+            // @ts-ignore because if it's null it will simply return an error which is handled down below
+            discord_id: user.user_metadata.provider_id,
+            wallet_address: accounts[0],
+          },
+        ]);
+      if (error) throw error;
+      setWallet(await fetchWallet());
+      toast(`Connected your wallet`, toastOptions);
+    } catch (error: any) {
+      console.error("error when connecting wallet", error);
+      toast.error(error.message, toastOptions);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -27,6 +90,7 @@ const Profile: NextPage = () => {
       setWallet(await fetchWallet());
       setLoading(false);
     })();
+    console.log("state of wallet:", wallet);
   }, []);
 
   if (loading) {
@@ -37,7 +101,6 @@ const Profile: NextPage = () => {
     return <NotLoggedInModal />;
   }
 
-  // TODO sometimes there are issues with connecting/deleting the wallet
   return (
     <div>
       <Head>
@@ -147,10 +210,26 @@ const Profile: NextPage = () => {
                   >
                     Go to our discord
                   </LinkBtn>
-                  <WalletDeleteBtn />
+                  <button
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      await deleteWallet();
+                    }}
+                    className={`inline-flex justify-center py-2 px-4 rounded-md shadow-sm bg-red-600 text-sm font-medium text-white hover:opacity-70`}
+                  >
+                    Delete Wallet
+                  </button>
                 </>
               ) : (
-                <WalletConnectBtn />
+                <button
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    await connectWallet();
+                  }}
+                  className={`inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70`}
+                >
+                  Connect Wallet
+                </button>
               )}
             </div>
           </div>

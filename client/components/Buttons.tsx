@@ -1,8 +1,6 @@
 import Link from "next/link";
 import router from "next/router";
 import { toast } from "react-toastify";
-import connectWallet from "../utils/connectWallet";
-import deleteWallet from "../utils/deleteWallet";
 import fetchWallet from "../utils/fetchWallet";
 import signIn from "../utils/signIn";
 import { supabase } from "../utils/supabaseClient";
@@ -68,34 +66,6 @@ export const SignOutBtn = ({ extraClasses }: ifcBtnProps) => {
       className={`${extraClasses} inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70`}
     >
       Sign out
-    </button>
-  );
-};
-
-export const WalletConnectBtn = ({ extraClasses }: ifcBtnProps) => {
-  return (
-    <button
-      onClick={async (e) => {
-        e.preventDefault();
-        await connectWallet();
-      }}
-      className={`${extraClasses} inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:opacity-70`}
-    >
-      Connect Wallet
-    </button>
-  );
-};
-
-export const WalletDeleteBtn = ({ extraClasses }: ifcBtnProps) => {
-  return (
-    <button
-      onClick={async (e) => {
-        e.preventDefault();
-        await deleteWallet();
-      }}
-      className={`${extraClasses} inline-flex justify-center py-2 px-4 rounded-md shadow-sm bg-red-600 text-sm font-medium text-white hover:opacity-70`}
-    >
-      Delete Wallet
     </button>
   );
 };

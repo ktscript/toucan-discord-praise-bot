@@ -33,7 +33,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     );
     checkUser();
     return () => {
-      // TODO: check this out
       // @ts-ignore
       authListener.unsubscribe();
       console.log("auth listener unsubscribe");

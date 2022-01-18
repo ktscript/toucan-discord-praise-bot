@@ -9,7 +9,6 @@ import toastOptions from "./toastOptions";
  */
 const fetchWallet = async (): Promise<discordToWalletConnection | null> => {
   console.log("attempting to fetch wallet");
-  // TODO this function works on the client but not on the server, no idea why
   try {
     const { data, error } = await supabase
       .from<discordToWalletConnection>("discordToWalletConnections")
