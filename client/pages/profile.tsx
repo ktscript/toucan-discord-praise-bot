@@ -18,7 +18,7 @@ import { supabase } from "../utils/supabaseClient";
 const Profile: NextPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [wallet, setWallet] = useState<discordToWalletConnection | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
