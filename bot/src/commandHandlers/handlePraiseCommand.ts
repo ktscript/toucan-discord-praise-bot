@@ -1,6 +1,7 @@
 import { Message } from "discord.js";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
 import ifcPraise from "../utils/ifcPraise";
+import parsePraise from "../utils/parsePraise";
 
 /**
  * @description attempts to call the praise method from the ToucanPraiseToken contract onto the praisee
@@ -13,27 +14,15 @@ export const handlePraiseCommand = (
   clientUrl: string
 ) => {
   try {
-    `${msg.author.username} (ID: ${msg.author.id}) want to praise!`;
+    `${msg.author.username} (ID: ${msg.author.id}) wants to praise!`;
     msg.react("🌳");
-    const reader = parsed.reader;
-    const praise: ifcPraise = { praiseTargets: [] };
 
-    /**
-     * loop over the parsed message, extract praise targets and praise reason
-     */
-    reader.args.some(() => {
-      const arg = reader.getString();
-
-      if (!arg) throw new Error("Empty message");
-
-      if (arg && arg.includes("@")) {
-        praise.praiseTargets.push(arg);
-      }
-      if (arg === "for") {
-        praise.reason = "for " + reader.getRemaining();
-        return true;
-      }
-    });
+    const praise: ifcPraise | null = parsePraise(parsed);
+    if (!praise) {
+      msg.reply("Unexpected error ocurred!");
+      throw new Error("Can't praise yourself!");
+      return;
+    }
 
     /**
      * error message in case there are no praise targets
