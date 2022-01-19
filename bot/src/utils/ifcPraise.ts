@@ -1,4 +1,6 @@
+import { ClientUser, User } from "discord.js";
+
 export default interface ifcPraise {
-  praiseTargets: string[]; // these are discord IDs
+  praiseTargets: User[];
   reason?: string;
 }

@@ -1,3 +1,4 @@
+import { discord } from "./discordClient";
 import ifcPraise from "./ifcPraise";
 
 const parsePraise = (parsed: any): ifcPraise | null => {
@@ -10,7 +11,12 @@ const parsePraise = (parsed: any): ifcPraise | null => {
      */
     reader.args.some(() => {
       if (reader.getUserID(true)) {
-        praise.praiseTargets.push(reader.getUserID());
+        (async () => {
+          const user = await discord.users.fetch(reader.getUserID());
+          console.log("user before pushing", user);
+          // TODO it can't push the user to the array for some reason
+          praise.praiseTargets.push(user);
+        })();
       }
 
       const arg = reader.getString();
@@ -23,6 +29,7 @@ const parsePraise = (parsed: any): ifcPraise | null => {
       }
     });
 
+    console.log(praise);
     return praise;
   } catch (error) {
     console.log("Error when parsing praise message", error);

@@ -22,8 +22,12 @@ export const handlePraiseCommand = (
      * Parse the praise
      */
     const praise: ifcPraise | null = parsePraise(parsed);
-    if (!praise) {
-      msg.reply("Unexpected error ocurred!");
+    if (!praise?.praiseTargets[0]) {
+      msg.reply(
+        "Praise couldn't be parsed." +
+          "\n\n A valid praise would look like:" +
+          "\n\n !praise @Alex Lazar for making this bot"
+      );
       throw new Error("Praise couldn't be parsed!");
       return;
     }
@@ -45,8 +49,7 @@ export const handlePraiseCommand = (
      * Check if user is trying to praise himself
      */
     praise.praiseTargets.map((praiseTarget) => {
-      console.log(`Evaluating if (${praiseTarget} == ${msg.author.id}`);
-      if (praiseTarget == msg.author.id) {
+      if (praiseTarget.id == msg.author.id) {
         msg.reply("Can't praise yourself!");
         throw new Error("Can't praise yourself!");
         return;
@@ -76,6 +79,7 @@ export const handlePraiseCommand = (
     const successMessage = `${
       msg.author
     } has praised ${praise.praiseTargets.map((praiseTarget, index) => {
+      // TODO for some reason this returns a promise object WHYYYYYY??!?!?!?
       if (index !== 0) {
         return ` ${praiseTarget}`;
       }
