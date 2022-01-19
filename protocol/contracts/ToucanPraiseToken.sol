@@ -10,24 +10,22 @@ contract ToucanPraiseToken is ERC20 {
     }
 
     /**
+    * @param _from the address that praises
     * @param _to the address to praise
     * @return true upon success
     *
-    * Mints & sends praiseTokens to an address
+    * Mints & sends praiseTokens to an address based on the senders balance
     */
+    function praise(address _from, address _to) public returns (bool) {
+        /**
+         * Just making sure ppl can't praise themselves.
+         */
+        require(_from != _to, "Can't praise yourself");
 
-    // TODO: don't allow people to praise themselves
-    function praise(address _to) public returns (bool) {
         /**
         * It's important to think of your praiseToken balance as your reputation.
         */
-        /**
-         * TODO: this may become an issue, because, the way I've made the auth system, I believe that 
-         * we will be minting/praising from a central wallet that the bot has access to as the bot has only read access to 
-         * the user's wallet. With that in mind, I may need to add an extra param (the address of the praisee), which will 
-         * be used to check the reputation of the person that praised.
-         */
-        uint256 reputation = balanceOf(msg.sender);
+        uint256 reputation = balanceOf(_from);
 
         /**
         * This makes the praise have a worth based on who praised.
