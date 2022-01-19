@@ -71,40 +71,37 @@ export const handlePraiseCommand = (
       return;
     }
 
-    // TODO: check praiseTargets' walletConnection(s)
-    praise.praiseTargets.map((id) => {
-      const praiseTargetWalletConnection = async () =>
-        await fetchWalletConnection(id);
-      const user = async () => await fetchUserById(id);
+    /**
+     * check praiseTargets' walletConnection(s), praise the ones that do, tell the ones that don't to connect
+     */
+    praise.praiseTargets.some(async (id) => {
+      const praiseTargetWalletConnection = await fetchWalletConnection(id);
+      const user = await fetchUserById(id);
 
       if (!praiseTargetWalletConnection) {
         msg.reply(
           `Praise target ${user} doesn't have a wallet connection! They should go to ${clientUrl} to connect.`
         );
-        throw new Error(
+        console.error(
           `Praise target ${user} doesn't have a wallet connection!`
         );
         return;
       }
+
+      // TODO: have the !praise command call the praise method from the contract.
+
+      /**
+       * a nice success message explaines who praised who and for what
+       */
+      const successMessage = `${msg.author} has praised ${user} ${
+        praise.reason || ""
+      }`;
+      console.log(successMessage);
+      msg.reply("Your praise has been successful!");
     });
 
-    // TODO: have the !praise command call the praise method from the contract.
-
-    /**
-     * TODO: a nice success message explained who praised who and for what
-     */
-    const successMessage = `${
-      msg.author.id
-    } has praised ${praise.praiseTargets.map((praiseTarget, index) => {
-      if (index !== 0) {
-        return ` ${praiseTarget}`;
-      }
-      return praiseTarget;
-    })} ${praise.reason || ""}`;
-    console.log(successMessage);
-    msg.reply("Your praise has been successful!");
     return;
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
