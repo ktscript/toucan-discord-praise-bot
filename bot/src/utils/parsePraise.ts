@@ -12,17 +12,14 @@ const parsePraise = (
     const praise: ifcPraise = { praiseTargets: [] };
 
     /**
-     * loop over the parsed message, extract praise targets and praise reason
+     * loop over the parsed message, extract praise targets' Discord IDs and the praise reason
      */
-    reader.args.some(() => {
+    reader.args.some((element: string, index: number) => {
       if (reader.getUserID(true)) {
-        (async () => {
-          const user = await discord.users.fetch(reader.getUserID());
-          // TODO it can't push the user to the array for some reason
-          praise.praiseTargets.push(user);
-        })();
+        praise.praiseTargets.push(reader.getUserID(true));
       }
 
+      // below here is good
       const arg = reader.getString();
 
       if (!arg) return true;

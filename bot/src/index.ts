@@ -24,7 +24,6 @@ discord.on("ready", () => {
  */
 
 discord.on("messageCreate", (msg: Message) => {
-  console.log("MSG: ", msg);
   const parsed: ParsedMessage<Message<boolean>> = parse(msg, PREFIX);
   if (!parsed.success) return;
 

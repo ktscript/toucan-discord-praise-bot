@@ -50,7 +50,7 @@ export const handlePraiseCommand = (
      * Check if user is trying to praise himself
      */
     praise.praiseTargets.map((praiseTarget) => {
-      if (praiseTarget.id == msg.author.id) {
+      if (praiseTarget == msg.author.id) {
         msg.reply("Can't praise yourself!");
         throw new Error("Can't praise yourself!");
         return;
@@ -80,7 +80,6 @@ export const handlePraiseCommand = (
     const successMessage = `${
       msg.author
     } has praised ${praise.praiseTargets.map((praiseTarget, index) => {
-      // TODO for some reason this returns a promise object WHYYYYYY??!?!?!?
       if (index !== 0) {
         return ` ${praiseTarget}`;
       }

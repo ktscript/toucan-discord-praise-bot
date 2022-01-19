@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import { parse, ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
-import { discord } from "../src/utils/discordClient";
-import ifcPraise from "../src/utils/ifcPraise";
-import parsePraise from "../src/utils/parsePraise";
+import { discord } from "../utils/discordClient";
+import ifcPraise from "../utils/ifcPraise";
+import parsePraise from "../utils/parsePraise";
 
 const PREFIX = "!";
 // this is the best example of a message I could reproduce so that I can actually implement some testing
@@ -49,7 +49,7 @@ describe("Testing the parsePraise() function", () => {
     const praise: ifcPraise | null = parsePraise(parsed);
 
     expect(praise).to.eql({
-      praiseTargets: ["<@!927661675736350791>"],
+      praiseTargets: ["927661675736350791"],
       reason: "for ABC",
     });
   });
