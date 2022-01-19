@@ -2,8 +2,10 @@ import { expect } from "chai";
 import { parse, ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
 import { discord } from "../utils/discordClient";
+import fetchUserById from "../utils/fetchUserByID";
 import ifcPraise from "../utils/ifcPraise";
 import parsePraise from "../utils/parsePraise";
+require("dotenv").config();
 
 const PREFIX = "!";
 // this is the best example of a message I could reproduce so that I can actually implement some testing
@@ -52,5 +54,16 @@ describe("Testing the parsePraise() function", () => {
       praiseTargets: ["927661675736350791"],
       reason: "for ABC",
     });
+  });
+});
+
+describe("Testing the fetchUserByID() function", () => {
+  it("Expecting a User object for the corresponding Discord ID", async () => {
+    const discordToken: string = process.env.DISCORD_TOKEN || "";
+    discord.login(discordToken);
+    const user = await fetchUserById("369184527286927371");
+    discord.destroy();
+
+    expect(user.id).to.eql("369184527286927371");
   });
 });

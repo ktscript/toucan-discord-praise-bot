@@ -1,6 +1,7 @@
 import { ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
 import { discord } from "../utils/discordClient";
+import fetchUserById from "../utils/fetchUserByID";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
 import ifcPraise from "../utils/ifcPraise";
 import parsePraise from "../utils/parsePraise";
@@ -71,15 +72,21 @@ export const handlePraiseCommand = (
     }
 
     // TODO: check praiseTargets' walletConnection(s)
-    // praise.praiseTargets.map((id) => {
-    //   if (!praiserWalletConnection) {
-    //     msg.reply(
-    //       `You need to connect your wallet before you can praise someone, go to ${clientUrl}`
-    //     );
-    //     throw new Error("Praiser doesn't have a wallet connection!");
-    //     return;
-    //   }
-    // });
+    praise.praiseTargets.map((id) => {
+      const praiseTargetWalletConnection = async () =>
+        await fetchWalletConnection(id);
+      const user = async () => await fetchUserById(id);
+
+      if (!praiseTargetWalletConnection) {
+        msg.reply(
+          `Praise target ${user} doesn't have a wallet connection! They should go to ${clientUrl} to connect.`
+        );
+        throw new Error(
+          `Praise target ${user} doesn't have a wallet connection!`
+        );
+        return;
+      }
+    });
 
     // TODO: have the !praise command call the praise method from the contract.
 
