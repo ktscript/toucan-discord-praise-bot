@@ -71,14 +71,23 @@ export const handlePraiseCommand = (
     }
 
     // TODO: check praiseTargets' walletConnection(s)
+    // praise.praiseTargets.map((id) => {
+    //   if (!praiserWalletConnection) {
+    //     msg.reply(
+    //       `You need to connect your wallet before you can praise someone, go to ${clientUrl}`
+    //     );
+    //     throw new Error("Praiser doesn't have a wallet connection!");
+    //     return;
+    //   }
+    // });
 
     // TODO: have the !praise command call the praise method from the contract.
 
     /**
-     * a nice success message explained who praised who and for what
+     * TODO: a nice success message explained who praised who and for what
      */
     const successMessage = `${
-      msg.author
+      msg.author.id
     } has praised ${praise.praiseTargets.map((praiseTarget, index) => {
       if (index !== 0) {
         return ` ${praiseTarget}`;
@@ -86,7 +95,7 @@ export const handlePraiseCommand = (
       return praiseTarget;
     })} ${praise.reason || ""}`;
     console.log(successMessage);
-    msg.reply(successMessage);
+    msg.reply("Your praise has been successful!");
     return;
   } catch (error) {
     console.log(error);
