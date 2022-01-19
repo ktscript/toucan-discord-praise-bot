@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { parse } from "discord-command-parser";
+import { parse, ParsedMessage } from "discord-command-parser";
 import { discord } from "./utils/discordClient";
 import { supabase } from "./utils/supabaseClient";
 import { handlePraiseCommand } from "./commandHandlers/handlePraiseCommand";
@@ -24,7 +24,8 @@ discord.on("ready", () => {
  */
 
 discord.on("messageCreate", (msg: Message) => {
-  const parsed = parse(msg, PREFIX);
+  console.log("MSG: ", msg);
+  const parsed: ParsedMessage<Message<boolean>> = parse(msg, PREFIX);
   if (!parsed.success) return;
 
   if (parsed.command === "help") {

@@ -1,8 +1,13 @@
+import { MessageArgumentReader, ParsedMessage } from "discord-command-parser";
+import { Message } from "discord.js";
 import { discord } from "./discordClient";
 import ifcPraise from "./ifcPraise";
 
-const parsePraise = (parsed: any): ifcPraise | null => {
+const parsePraise = (
+  parsed: ParsedMessage<Message<boolean>>
+): ifcPraise | null => {
   try {
+    // @ts-ignore the reader exists, but discord-command-parser has an issue with this type
     const reader = parsed.reader;
     const praise: ifcPraise = { praiseTargets: [] };
 
@@ -13,7 +18,6 @@ const parsePraise = (parsed: any): ifcPraise | null => {
       if (reader.getUserID(true)) {
         (async () => {
           const user = await discord.users.fetch(reader.getUserID());
-          console.log("user before pushing", user);
           // TODO it can't push the user to the array for some reason
           praise.praiseTargets.push(user);
         })();
@@ -29,7 +33,6 @@ const parsePraise = (parsed: any): ifcPraise | null => {
       }
     });
 
-    console.log(praise);
     return praise;
   } catch (error) {
     console.log("Error when parsing praise message", error);

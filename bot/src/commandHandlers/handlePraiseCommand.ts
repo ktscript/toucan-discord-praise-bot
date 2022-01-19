@@ -1,3 +1,4 @@
+import { ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
 import { discord } from "../utils/discordClient";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
@@ -10,7 +11,7 @@ import parsePraise from "../utils/parsePraise";
  * @param msg the message object from discord.js used to reply, etc.
  */
 export const handlePraiseCommand = (
-  parsed: any,
+  parsed: ParsedMessage<Message<boolean>>,
   msg: Message,
   clientUrl: string
 ) => {
