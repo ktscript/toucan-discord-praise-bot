@@ -32,12 +32,14 @@ contract ToucanPraiseToken is ERC20 {
         /**
         * This makes the praise have a worth based on who praised.
         * If someone more reputable praises, then the praise will be worth more.
+        * But I have also implement a minimum praiseWorth of 1 in case the person that praises has 0 balance.
         */
-        /**
-         * TODO: I think if we should make sure this is a minimum of 1, 
-         * so that if someone has 0 reputation he can still praise
-         */
-        uint256 praiseWorth = reputation / 10;
+        if (reputation < 10) {
+            uint256 praiseWorth = 1;
+        } else {
+            uint256 praiseWorth = reputation / 10;
+        }
+        
 
         /**
         * We make sure the person that praises doesn't lose any reputation.
