@@ -1,19 +1,20 @@
 import { ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
 import { ethers } from "ethers";
+import callPraise from "../utils/callPraise";
 import { discord } from "../utils/discordClient";
 import fetchUserById from "../utils/fetchUserByID";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
+import discordToWalletConnection from "../utils/ifcDiscordtoWalletConnection";
 import ifcPraise from "../utils/ifcPraise";
 import parsePraise from "../utils/parsePraise";
-import * as artifact from "../utils/ToucanPraiseToken.json";
 
 /**
  * @description attempts to call the praise method from the ToucanPraiseToken contract onto the praisee
  * @param parsed the message parsed by discord-command-parser used for readonly operations
  * @param msg the message object from discord.js used to reply, etc.
  */
-export const handlePraiseCommand = (
+export const handlePraiseCommand = async (
   parsed: ParsedMessage<Message<boolean>>,
   msg: Message,
   clientUrl: string
@@ -63,8 +64,7 @@ export const handlePraiseCommand = (
     /**
      * Check if the user that is trying to praise has his wallet connected
      */
-    const praiserWalletConnection = async () =>
-      await fetchWalletConnection(msg.author.id);
+    const praiserWalletConnection = await fetchWalletConnection(msg.author.id);
     if (!praiserWalletConnection) {
       msg.reply(
         `You need to connect your wallet before you can praise someone, go to ${clientUrl}`
@@ -76,7 +76,7 @@ export const handlePraiseCommand = (
     /**
      * check praiseTargets' walletConnection(s), praise the ones that do, tell the ones that don't to connect
      */
-    praise.praiseTargets.some(async (id) => {
+    praise.praiseTargets.map(async (id) => {
       const praiseTargetWalletConnection = await fetchWalletConnection(id);
       const user = await fetchUserById(id);
 
@@ -90,18 +90,16 @@ export const handlePraiseCommand = (
         return;
       }
 
-      // get provider for Rinkeby (4 == Rinkeby)
-      const provider = ethers.getDefaultProvider(4, {
-        alchemy: process.env.RINKEBY_PRIVATE_KEY || null,
-        etherscan: process.env.ETHERSCAN_API_KEY || null,
-      });
-      const tptContract = new ethers.Contract(
-        process.env.RINKEBY_CONTRACT_ADDRESS || "",
-        artifact.abi,
-        provider
+      /**
+       * this is the moment we interact with the contract to actually praise someone on the blockchain
+       */
+      const res = await callPraise(
+        msg,
+        user,
+        praiserWalletConnection,
+        praiseTargetWalletConnection
       );
-
-      // TODO: have the !praise command call the praise method from the contract.
+      console.log("callPraise res:", res);
 
       /**
        * success message

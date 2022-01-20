@@ -46,6 +46,8 @@ contract ToucanPraiseToken is ERC20 {
         * Minting more, also lowers the value of each individual token, adding an element similar to 'decaying'
         */
         _mint(_to, praiseWorth);
+
+        // TODO emit an event
         return true;
     }
 }
