@@ -1,6 +1,5 @@
-import { MessageArgumentReader, ParsedMessage } from "discord-command-parser";
+import { ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
-import { discord } from "./discordClient";
 import ifcPraise from "./ifcPraise";
 
 const parsePraise = (

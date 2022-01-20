@@ -1,11 +1,8 @@
 import { ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
-import { ethers } from "ethers";
 import callPraise from "../utils/callPraise";
-import { discord } from "../utils/discordClient";
 import fetchUserById from "../utils/fetchUserByID";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
-import discordToWalletConnection from "../utils/ifcDiscordtoWalletConnection";
 import ifcPraise from "../utils/ifcPraise";
 import parsePraise from "../utils/parsePraise";
 

@@ -1,10 +1,7 @@
 import { Message } from "discord.js";
 import { parse, ParsedMessage } from "discord-command-parser";
 import { discord } from "./utils/discordClient";
-import { supabase } from "./utils/supabaseClient";
 import { handlePraiseCommand } from "./commandHandlers/handlePraiseCommand";
-import discordToWalletConnection from "./utils/ifcDiscordtoWalletConnection";
-import fetchWalletConnection from "./utils/fetchWalletConnection";
 import handleConnectCommand from "./commandHandlers/handleConnectCommand";
 import handleHelpCommand from "./commandHandlers/handleHelpCommand";
 require("dotenv").config();
