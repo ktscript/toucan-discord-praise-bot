@@ -108,7 +108,7 @@ export const handlePraiseCommand = async (
         praise.reason || ""
       }`;
       console.log(successMessage);
-      msg.reply("Your praise has been successful!");
+      msg.reply(`You successfully praised ${user}`);
     });
 
     return;

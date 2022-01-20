@@ -7,7 +7,7 @@ const fetchWalletConnection = async (
   try {
     let { data, error } = await supabase
       .from<ifcDiscordtoWalletConnection>("discordToWalletConnections")
-      .select()
+      .select("*")
       .eq("discord_id", _discordId);
     if (error) throw error;
     if (!data) throw new Error("No data matching the given Discord ID");
