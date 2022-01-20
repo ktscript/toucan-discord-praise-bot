@@ -77,7 +77,7 @@ describe("Testing utils functions", () => {
         "369184527286927371" // this would be me
       );
 
-      expect(walletConnection).to.eql("369184527286927371");
+      expect(walletConnection?.discord_id).to.eql("369184527286927371");
     });
   });
 
