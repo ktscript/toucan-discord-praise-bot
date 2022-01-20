@@ -51,6 +51,7 @@ const Profile: NextPage = () => {
 
       const provider = new ethers.providers.Web3Provider(ethereum);
       const { chainId } = await provider.getNetwork();
+      // TODO add more networks
       if (chainId != 4) {
         throw new Error("Make sure you are on Rinkeby Test Network.");
       }
