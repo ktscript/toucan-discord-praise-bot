@@ -1,10 +1,12 @@
 import { ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
+import { ethers } from "ethers";
 import { discord } from "../utils/discordClient";
 import fetchUserById from "../utils/fetchUserByID";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
 import ifcPraise from "../utils/ifcPraise";
 import parsePraise from "../utils/parsePraise";
+import * as artifact from "../utils/ToucanPraiseToken.json";
 
 /**
  * @description attempts to call the praise method from the ToucanPraiseToken contract onto the praisee
@@ -87,6 +89,17 @@ export const handlePraiseCommand = (
         );
         return;
       }
+
+      // get provider for Rinkeby (4 == Rinkeby)
+      const provider = ethers.getDefaultProvider(4, {
+        alchemy: process.env.ALCHEMY_API_TOKEN || null,
+        etherscan: process.env.ETHERSCAN_API_TOKEN || null,
+      });
+      const tptContract = new ethers.Contract(
+        "contract address",
+        artifact.abi,
+        provider
+      );
 
       // TODO: have the !praise command call the praise method from the contract.
 

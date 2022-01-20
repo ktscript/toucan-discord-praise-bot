@@ -13,6 +13,9 @@
 
     /* Advanced Options */
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+
+    /* Needed to be able to import the ABI */
+    "resolveJsonModule": true
   }
 }
