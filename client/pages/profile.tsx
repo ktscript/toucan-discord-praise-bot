@@ -74,7 +74,7 @@ const Profile: NextPage = () => {
           },
         ]);
       if (error) throw error;
-      setWallet(await fetchWallet());
+      setWallet(await fetchWallet(user?.id || ""));
       toast(`Connected your wallet`, toastOptions);
     } catch (error: any) {
       console.error("error when connecting wallet", error);
@@ -88,7 +88,7 @@ const Profile: NextPage = () => {
     (async () => {
       setLoading(true);
       setUser(await supabase.auth.user());
-      setWallet(await fetchWallet());
+      setWallet(await fetchWallet(user?.id || ""));
       setLoading(false);
     })();
     console.log("state of wallet:", wallet);

@@ -1,20 +1,23 @@
+import { PostgrestResponse } from "@supabase/supabase-js";
+import discordToWalletConnection from "./ifcDiscordtoWalletConnection";
 import ifcDiscordtoWalletConnection from "./ifcDiscordtoWalletConnection";
 import { supabase } from "./supabaseClient";
 
 const fetchWalletConnection = async (
-  _discordId: string
+  discordId: string
 ): Promise<ifcDiscordtoWalletConnection | null> => {
   try {
-    let { data, error } = await supabase
-      .from<ifcDiscordtoWalletConnection>("discordToWalletConnections")
-      .select("*")
-      .eq("discord_id", _discordId);
+    const { data, error }: PostgrestResponse<discordToWalletConnection> =
+      await supabase
+        .from<ifcDiscordtoWalletConnection>("discordToWalletConnections")
+        .select()
+        .eq("discord_id", discordId);
     if (error) throw error;
-    if (!data) throw new Error("No data matching the given Discord ID");
-    return data;
+    if (!data || !data[0])
+      throw new Error("No data matching the given Discord ID");
     return data[0];
   } catch (error: any) {
-    console.log(`Error when checking walletConnection:`, error);
+    console.error(`Error when checking walletConnection:`, error);
     return null;
   }
 };
