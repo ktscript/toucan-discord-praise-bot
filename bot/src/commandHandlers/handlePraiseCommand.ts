@@ -92,11 +92,11 @@ export const handlePraiseCommand = (
 
       // get provider for Rinkeby (4 == Rinkeby)
       const provider = ethers.getDefaultProvider(4, {
-        alchemy: process.env.ALCHEMY_API_TOKEN || null,
-        etherscan: process.env.ETHERSCAN_API_TOKEN || null,
+        alchemy: process.env.RINKEBY_PRIVATE_KEY || null,
+        etherscan: process.env.ETHERSCAN_API_KEY || null,
       });
       const tptContract = new ethers.Contract(
-        "contract address",
+        process.env.RINKEBY_CONTRACT_ADDRESS || "",
         artifact.abi,
         provider
       );
