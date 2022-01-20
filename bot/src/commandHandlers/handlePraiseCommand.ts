@@ -91,7 +91,7 @@ export const handlePraiseCommand = (
       // TODO: have the !praise command call the praise method from the contract.
 
       /**
-       * a nice success message explaines who praised who and for what
+       * success message
        */
       const successMessage = `${msg.author} has praised ${user} ${
         praise.reason || ""

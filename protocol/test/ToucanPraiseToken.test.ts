@@ -37,7 +37,7 @@ describe("ToucanPraiseToken", function () {
       expect(addr2Balance).to.equal(1);
     });
 
-    it("Should mint 20 tokens in addr3 and 2 tokens in addr1", async function () {
+    it("Should mint 20 tokens in addr2 and 2 tokens in addr1", async function () {
       for (let index = 0; index < 20; index++) {
         await tpt.praise(addr1.address, addr2.address);
       }
