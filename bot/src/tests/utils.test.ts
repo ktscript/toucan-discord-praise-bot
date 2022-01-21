@@ -86,9 +86,8 @@ describe("Testing utils functions", () => {
       const praiserWalletConnection = await fetchWalletConnection(
         "369184527286927371" // this would be me
       );
-      // TODO this obviously errors out because the Tocaun Praise Bot doesn't have a walletConnection stored
       const praiseTargetWalletConnection = await fetchWalletConnection(
-        "927661675736350791" // this would be Toucan Praise Bot
+        "927661675736350791" // this would be Toucan Praise Bot's discord ID (I've made a walletConnection for it under Carmen's discord & another wallet of mine)
       );
       expect(praiserWalletConnection).to.not.be.undefined;
       expect(praiserWalletConnection).to.not.be.null;
@@ -97,7 +96,12 @@ describe("Testing utils functions", () => {
       if (!praiserWalletConnection || !praiseTargetWalletConnection) {
         return;
       }
-      const target = await fetchUserById("targetId");
+
+      const discordToken: string = process.env.DISCORD_TOKEN || "";
+      discord.login(discordToken);
+      const target = await fetchUserById("927661675736350791");
+      discord.destroy();
+
       const res = await callPraise(
         exampleMessage,
         target,
