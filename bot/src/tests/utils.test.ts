@@ -86,6 +86,7 @@ describe("Testing utils functions", () => {
       const praiserWalletConnection = await fetchWalletConnection(
         "369184527286927371" // this would be me
       );
+      // TODO this obviously errors out because the Tocaun Praise Bot doesn't have a walletConnection stored
       const praiseTargetWalletConnection = await fetchWalletConnection(
         "927661675736350791" // this would be Toucan Praise Bot
       );
