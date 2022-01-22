@@ -1,8 +1,10 @@
 import { expect } from "chai";
 import { parse, ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
+import { BigNumber, utils } from "ethers";
 import callPraise from "../utils/callPraise";
 import { discord } from "../utils/discordClient";
+import fetchTptBalance from "../utils/fetchTptBalance";
 import fetchUserById from "../utils/fetchUserByID";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
 import ifcPraise from "../utils/ifcPraise";
@@ -72,10 +74,15 @@ describe("Testing utils functions", () => {
   });
 
   describe("Testing the fetchTptBalance() function", () => {
-    it("Expecting a ...", async () => {
-      // TODO write test
+    it("Expecting a my tpt balance to be 30", async () => {
+      const myBalance = await fetchTptBalance(
+        "0x721F6f7A29b99CbdE1F18C4AA7D7AEb31eb2923B"
+      );
 
-      expect("a").to.eql("b");
+      /**
+       * this can change depending on how many TPT the owner contract has so do take that into account if it fails
+       */
+      expect(myBalance).to.eql(utils.parseEther("30"));
     });
   });
 

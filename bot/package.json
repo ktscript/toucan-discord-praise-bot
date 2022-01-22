@@ -9,6 +9,7 @@
   },
   "scripts": {
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --timeout 30000 -r ts-node/register 'src/tests/**/*.ts'",
+    "test-utils": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha --timeout 30000 -r ts-node/register 'src/tests/utils.test.ts'",
     "start": "node dist/index.js",
     "postinstall": "tsc",
     "watch-node": "nodemon dist/index.js",

@@ -1,13 +1,11 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers, utils } from "ethers";
 import * as artifact from "../utils/ToucanPraiseToken.json";
 
 /**
  * TODO: a function that fetches someone TPT balance
  * @param wallet_address the address that we want to check the TPT balance for
  */
-const fetchTptBalance = async (
-  walletAddress: string
-): Promise<number | null> => {
+const fetchTptBalance = async (walletAddress: string): Promise<BigNumber> => {
   try {
     const provider = new ethers.providers.JsonRpcProvider(
       process.env.INFURA_RINKEBY_URL,
@@ -26,13 +24,13 @@ const fetchTptBalance = async (
       wallet
     );
 
-    return await tptContract.balanceOf(walletAddress).call();
+    return await tptContract.balanceOf(walletAddress);
   } catch (error) {
     console.error(
       `Error interacting with the contract, fetchTptBalance():`,
       error
     );
-    return null;
+    return BigNumber.from(0);
   }
 };
 

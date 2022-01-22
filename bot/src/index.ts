@@ -6,6 +6,7 @@ import handleConnectCommand from "./commandHandlers/handleConnectCommand";
 import handleHelpCommand from "./commandHandlers/handleHelpCommand";
 import fetchWalletConnection from "./utils/fetchWalletConnection";
 import fetchTptBalance from "./utils/fetchTptBalance";
+import { BigNumber, utils } from "ethers";
 require("dotenv").config();
 
 const PREFIX = "!";
@@ -25,8 +26,7 @@ discord.on("ready", () => {
  */
 setInterval(async () => {
   /**
-   * calling this so the interval doesn't actually do anything for now (until I make the fetchTptBalance() function
-   * and I test it)
+   * TODO calling this so the interval doesn't actually do anything for now (until I test everything in here)
    */
   return;
   /**
@@ -47,8 +47,8 @@ setInterval(async () => {
     /**
      * and this is the point where we can give him roles, nicknames and other rewards for having a certain TPT balance
      */
-    if (balance !== null && balance > 100) {
-      console.log("This user has good reputation");
+    if (balance > utils.parseEther("100")) {
+      console.log(`${user} has a good reputation`);
     }
   });
 }, 1000 * 60 * 60 * 24); // the interval runs once a day, I don't think we need to check ppl's balances much more often than this
