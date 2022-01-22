@@ -82,7 +82,7 @@ describe("Testing utils functions", () => {
   });
 
   describe("Testing the callPraise() function", () => {
-    it("Expecting a ...", async () => {
+    it("Expecting status code of the txn to be 1", async () => {
       const praiserWalletConnection = await fetchWalletConnection(
         "369184527286927371" // this would be me
       );
@@ -109,9 +109,8 @@ describe("Testing utils functions", () => {
         praiseTargetWalletConnection
       );
 
-      console.log(res);
       // I'm not really sure what it should return lol
-      expect(res).to.eql("369184527286927371");
+      expect(res.status).to.eql(1);
     });
   });
 });
