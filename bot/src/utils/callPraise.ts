@@ -19,7 +19,6 @@ const callPraise = async (
     provider
   );
   const signer = provider.getSigner(process.env.OWNER_ADDRESS_RINKEBY);
-  // Error: invalid hexlify value (argument="value", value={"_isSigner":true,"address":"0x82CcBA7dB1c837774c4b1ec77cA8f06BEdACaB5B","provider":null}, code=INVALID_ARGUMENT, version=bytes/5.5.0)
   wallet = wallet.connect(provider);
 
   const tptContract = new ethers.Contract(

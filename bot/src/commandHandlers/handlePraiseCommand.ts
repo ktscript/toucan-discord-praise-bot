@@ -96,7 +96,6 @@ export const handlePraiseCommand = async (
         praiserWalletConnection,
         praiseTargetWalletConnection
       );
-      console.log("callPraise res:", res);
 
       /**
        * success message
