@@ -5,6 +5,7 @@ import { handlePraiseCommand } from "./commandHandlers/handlePraiseCommand";
 import handleConnectCommand from "./commandHandlers/handleConnectCommand";
 import handleHelpCommand from "./commandHandlers/handleHelpCommand";
 import fetchWalletConnection from "./utils/fetchWalletConnection";
+import fetchTptBalance from "./utils/fetchTptBalance";
 require("dotenv").config();
 
 const PREFIX = "!";
@@ -44,19 +45,11 @@ setInterval(async () => {
     /**
      * and this is the point where we can give him roles, nicknames and other rewards for having a certain TPT balance
      */
-    if (balance > 100) {
+    if (balance !== null && balance > 100) {
       console.log("This user has good reputation");
     }
   });
 }, 1000 * 60 * 60 * 24); // the interval runs once a day, I don't think we need to check ppl's balances much more often than this
-
-/**
- * TODO: a function that fetches someone TPT balance
- * @param wallet_address the address that we want to check the TPT balance for
- */
-const fetchTptBalance = async (wallet_address: string) => {
-  throw new Error("Function not implemented.");
-};
 
 discord.on("messageCreate", (msg: Message) => {
   /**
