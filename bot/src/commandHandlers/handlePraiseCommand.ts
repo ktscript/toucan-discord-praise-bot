@@ -97,6 +97,12 @@ export const handlePraiseCommand = async (
         praiseTargetWalletConnection
       );
 
+      if (res.status !== 1) {
+        throw new Error(
+          "Something bad might have happened when calling the praise contract method."
+        );
+      }
+
       /**
        * success message
        */
@@ -108,7 +114,8 @@ export const handlePraiseCommand = async (
     });
 
     return;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
+    msg.reply(`An unexpected error occurred: ${error.message}`);
   }
 };
