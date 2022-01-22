@@ -15,6 +15,8 @@ discord.on("ready", () => {
   console.log("Bot Online! Woohooo!");
 });
 
+// TODO it'd be nice if all msg.reply would be private
+
 /**
  * I had a slight fear with this interval process, that it may be too resource-intensive
  * since it will run a Supabase query and potentially a read-only smart contract method for all server users.
