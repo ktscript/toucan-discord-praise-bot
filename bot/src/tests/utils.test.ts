@@ -88,37 +88,4 @@ describe("Testing utils functions", () => {
       expect(walletConnection?.discord_id).to.eql("369184527286927371");
     });
   });
-
-  describe("Testing the callPraise() function", () => {
-    it("Expecting status code of the txn to be 1", async () => {
-      const praiserWalletConnection = await fetchWalletConnection(
-        "369184527286927371" // this would be me
-      );
-      const praiseTargetWalletConnection = await fetchWalletConnection(
-        "927661675736350791" // this would be Toucan Praise Bot's discord ID (I've made a walletConnection for it under Carmen's discord & another wallet of mine)
-      );
-      expect(praiserWalletConnection).to.not.be.undefined;
-      expect(praiserWalletConnection).to.not.be.null;
-      expect(praiseTargetWalletConnection).to.not.be.undefined;
-      expect(praiseTargetWalletConnection).to.not.be.null;
-      if (!praiserWalletConnection || !praiseTargetWalletConnection) {
-        return;
-      }
-
-      const discordToken: string = process.env.DISCORD_TOKEN || "";
-      discord.login(discordToken);
-      const target = await fetchUserById("927661675736350791");
-      discord.destroy();
-
-      const res = await callPraise(
-        exampleMessage,
-        target,
-        praiserWalletConnection,
-        praiseTargetWalletConnection
-      );
-
-      // I'm not really sure what it should return lol
-      expect(res.status).to.eql(1);
-    });
-  });
 });
