@@ -71,13 +71,11 @@ describe("Testing utils functions", () => {
     });
   });
 
-  describe("Testing the fetchWalletConnection() function", () => {
-    it("Expecting a discordToWalletConnection object for the corresponding Discord ID", async () => {
-      const walletConnection = await fetchWalletConnection(
-        "369184527286927371" // this would be me
-      );
+  describe("Testing the fetchTptBalance() function", () => {
+    it("Expecting a ...", async () => {
+      // TODO write test
 
-      expect(walletConnection?.discord_id).to.eql("369184527286927371");
+      expect("a").to.eql("b");
     });
   });
 
