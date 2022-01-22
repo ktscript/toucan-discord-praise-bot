@@ -34,7 +34,8 @@ describe("ToucanPraiseToken", function () {
       const addr1Balance = await tpt.balanceOf(addr1.address);
       const addr2Balance = await tpt.balanceOf(addr2.address);
       expect(addr1Balance).to.equal(0);
-      expect(addr2Balance).to.equal(1);
+      const addr2ExpectedBalance = ethers.utils.parseEther("1");
+      expect(addr2Balance).to.equal(addr2ExpectedBalance);
     });
 
     it("Should mint 20 tokens in addr2 and 2 tokens in addr1", async function () {
@@ -44,8 +45,10 @@ describe("ToucanPraiseToken", function () {
       await tpt.praise(addr2.address, addr1.address);
       const addr1Balance = await tpt.balanceOf(addr1.address);
       const addr2Balance = await tpt.balanceOf(addr2.address);
-      expect(addr1Balance).to.equal(2);
-      expect(addr2Balance).to.equal(20);
+      const addr1ExpectedBalance = ethers.utils.parseEther("2");
+      const addr2ExpectedBalance = ethers.utils.parseEther("20");
+      expect(addr1Balance).to.equal(addr1ExpectedBalance);
+      expect(addr2Balance).to.equal(addr2ExpectedBalance);
     });
 
     it("Should fail since you're trying to praise yourself", async function () {

@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract ToucanPraiseToken is ERC20 {
-    uint public constant _INITIAL_SUPPLY = 10000 * (10**18);
+    uint public constant _INITIAL_SUPPLY = 30 * (10**18);
     constructor() ERC20("ToucanPraiseToken", "TPT") {
         _mint(msg.sender, _INITIAL_SUPPLY);
     }
@@ -33,8 +33,8 @@ contract ToucanPraiseToken is ERC20 {
         * But I have also implement a minimum praiseWorth of 1 in case the person that praises has 0 balance.
         */
         uint256 praiseWorth;
-        if (reputation < 10) {
-            praiseWorth = 1;
+        if (reputation < (10 * (10**18))) {
+            praiseWorth = 1 * (10**18);
         } else {
             praiseWorth = reputation / 10;
         }
