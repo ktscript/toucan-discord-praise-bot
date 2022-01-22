@@ -39,6 +39,7 @@ const Profile: NextPage = () => {
     }
   };
 
+  // TODO add more ways to connect your wallet
   const connectWallet = async () => {
     console.log("attempting to connect to the MetaMask wallet");
     try {

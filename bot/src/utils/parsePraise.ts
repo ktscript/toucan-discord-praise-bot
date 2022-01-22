@@ -2,6 +2,11 @@ import { ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
 import ifcPraise from "./ifcPraise";
 
+/**
+ *
+ * @param parsed is the discord-command-parser 'parsed' message that we are trying to further parse to extract what's needed
+ * @returns a Praise object which will contain praiseTargets and reason for the praise
+ */
 const parsePraise = (
   parsed: ParsedMessage<Message<boolean>>
 ): ifcPraise | null => {
@@ -14,15 +19,20 @@ const parsePraise = (
      * loop over the parsed message, extract praise targets' Discord IDs and the praise reason
      */
     reader.args.some((element: string, index: number) => {
+      /**
+       * find if the argument is a discord ID and store it in the praise
+       */
       if (reader.getUserID(true)) {
         praise.praiseTargets.push(reader.getUserID(true));
       }
 
-      // below here is good
       const arg = reader.getString();
 
       if (!arg) return true;
 
+      /**
+       * check for the "for" keyword and store the remaining text as a reason
+       */
       if (arg === "for") {
         praise.reason = "for " + reader.getRemaining();
         return true;

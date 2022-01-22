@@ -5,12 +5,11 @@ import * as artifact from "../utils/ToucanPraiseToken.json";
 require("dotenv").config();
 
 /**
- *
  * @param msg will be used for the success console.log
  * @param target will be used for the success console.log
  * @param praiserWalletConnection will be used for the address of the praiser
  * @param praiseTargetWalletConnection will be used for the address of the praiseTarget
- * @returns
+ * @returns the praiseTxn object (which should have a status === 1 if successful), or null if some error happened
  */
 const callPraise = async (
   msg: Message,

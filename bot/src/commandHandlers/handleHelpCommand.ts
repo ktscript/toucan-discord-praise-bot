@@ -1,5 +1,9 @@
 import { Message } from "discord.js";
 
+/**
+ *
+ * @param msg the non-parsed message object, can be used to reply to the message
+ */
 const handleHelpCommand = (msg: Message) => {
   `${msg.author.username} (ID: ${msg.author.id}) needs help!`;
   msg.react("🌳");

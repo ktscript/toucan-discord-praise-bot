@@ -9,7 +9,7 @@ import parsePraise from "../utils/parsePraise";
 /**
  * @description attempts to call the praise method from the ToucanPraiseToken contract onto the praisee
  * @param parsed the message parsed by discord-command-parser used for readonly operations
- * @param msg the message object from discord.js used to reply, etc.
+ * @param msg the non-parsed message object, can be used to reply to the message
  */
 export const handlePraiseCommand = async (
   parsed: ParsedMessage<Message<boolean>>,
@@ -18,10 +18,13 @@ export const handlePraiseCommand = async (
 ) => {
   try {
     `${msg.author.username} (ID: ${msg.author.id}) wants to praise!`;
+    /**
+     * the tree reaction show the user that the bot is processing his command
+     */
     msg.react("🌳");
 
     /**
-     * Parse the praise
+     * Prases and extracts the praise
      */
     const praise: ifcPraise | null = parsePraise(parsed);
     if (!praise?.praiseTargets[0]) {

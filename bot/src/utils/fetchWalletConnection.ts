@@ -3,6 +3,11 @@ import discordToWalletConnection from "./ifcDiscordtoWalletConnection";
 import ifcDiscordtoWalletConnection from "./ifcDiscordtoWalletConnection";
 import { supabase } from "./supabaseClient";
 
+/**
+ *
+ * @param discordId the discord ID of the user
+ * @returns the discordToWalletConnection of the user (as stored in Supabase), or null if unsuccessful
+ */
 const fetchWalletConnection = async (
   discordId: string
 ): Promise<ifcDiscordtoWalletConnection | null> => {
