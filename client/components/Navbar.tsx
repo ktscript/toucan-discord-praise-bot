@@ -3,13 +3,16 @@ import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
-import { DiscordAuthBtn, SignOutBtn } from "../components/Buttons";
+import {
+  DiscordAuthBtn,
+  SignOutBtn,
+  SlackAuthBtn,
+} from "../components/Buttons";
 import "react-toastify/dist/ReactToastify.css";
 
 const navigation = [
   { name: "Home", href: "/" },
   { name: "Profile", href: "/profile" },
-  { name: "Discord", href: "https://discord.gg/cDbWuZKWxe" },
 ];
 
 /**
@@ -50,7 +53,14 @@ const Navbar = ({ authenticatedState }: { authenticatedState: boolean }) => {
           </div>
         </div>
         <div className="hidden md:flex">
-          {authenticatedState ? <SignOutBtn /> : <DiscordAuthBtn />}
+          {authenticatedState ? (
+            <SignOutBtn />
+          ) : (
+            <>
+              <DiscordAuthBtn />
+              <SlackAuthBtn extraClasses="ml-2" />
+            </>
+          )}
         </div>
       </nav>
 
@@ -92,7 +102,14 @@ const Navbar = ({ authenticatedState }: { authenticatedState: boolean }) => {
               ))}
             </div>
             <div className="p-2">
-              {authenticatedState ? <SignOutBtn /> : <DiscordAuthBtn />}
+              {authenticatedState ? (
+                <SignOutBtn />
+              ) : (
+                <>
+                  <DiscordAuthBtn extraClasses="w-full" />
+                  <SlackAuthBtn extraClasses="w-full mt-2" />
+                </>
+              )}
             </div>
           </div>
         </Popover.Panel>

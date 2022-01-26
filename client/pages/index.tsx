@@ -4,7 +4,7 @@ import { ChevronRightIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
-import { DiscordAuthBtn } from "../components/Buttons";
+import { DiscordAuthBtn, SlackAuthBtn } from "../components/Buttons";
 import { useEffect } from "react";
 import { Loader } from "../components/Modals";
 
@@ -100,6 +100,7 @@ const Home: NextPage<IfcHomePageProps> = ({
                         </p>
                         <div className="mt-4">
                           <DiscordAuthBtn extraClasses="w-full" />
+                          <SlackAuthBtn extraClasses="w-full mt-2" />
                         </div>
                       </div>
                     </div>
