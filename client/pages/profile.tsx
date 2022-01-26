@@ -89,7 +89,9 @@ const Profile: NextPage = () => {
     (async () => {
       setLoading(true);
       setUser(await supabase.auth.user());
-      setWallet(await fetchWallet(user?.id || ""));
+      if (user?.id) {
+        setWallet(await fetchWallet(user?.id));
+      }
       setLoading(false);
     })();
     console.log("state of wallet:", wallet);
