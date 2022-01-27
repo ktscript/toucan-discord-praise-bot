@@ -70,7 +70,6 @@ describe("Testing the callPraise() function", () => {
       praiseTargetWalletConnection
     );
 
-    // I'm not really sure what it should return lol
     expect(res.status).to.eql(1);
   });
 });

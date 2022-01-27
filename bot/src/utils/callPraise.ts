@@ -1,7 +1,7 @@
 import { Message, User } from "discord.js";
 import { ethers } from "ethers";
-import discordToWalletConnection from "./ifcDiscordtoWalletConnection";
 import * as artifact from "../utils/ToucanPraiseToken.json";
+import ifcWalletConnection from "./ifcWalletConnection";
 require("dotenv").config();
 
 /**
@@ -14,8 +14,8 @@ require("dotenv").config();
 const callPraise = async (
   msg: Message,
   target: User,
-  praiserWalletConnection: discordToWalletConnection,
-  praiseTargetWalletConnection: discordToWalletConnection
+  praiserWalletConnection: ifcWalletConnection,
+  praiseTargetWalletConnection: ifcWalletConnection
 ) => {
   try {
     const provider = new ethers.providers.JsonRpcProvider(

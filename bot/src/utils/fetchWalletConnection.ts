@@ -1,6 +1,5 @@
 import { PostgrestResponse } from "@supabase/supabase-js";
-import discordToWalletConnection from "./ifcDiscordtoWalletConnection";
-import ifcDiscordtoWalletConnection from "./ifcDiscordtoWalletConnection";
+import ifcWalletConnection from "./ifcWalletConnection";
 import { supabase } from "./supabaseClient";
 
 /**
@@ -10,11 +9,11 @@ import { supabase } from "./supabaseClient";
  */
 const fetchWalletConnection = async (
   discordId: string
-): Promise<ifcDiscordtoWalletConnection | null> => {
+): Promise<ifcWalletConnection | null> => {
   try {
-    const { data, error }: PostgrestResponse<discordToWalletConnection> =
+    const { data, error }: PostgrestResponse<ifcWalletConnection> =
       await supabase
-        .from<ifcDiscordtoWalletConnection>("discordToWalletConnections")
+        .from<ifcWalletConnection>("wallet_connections")
         .select()
         .eq("discord_id", discordId);
     if (error) throw error;
