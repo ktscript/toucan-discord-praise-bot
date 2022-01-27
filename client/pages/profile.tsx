@@ -97,6 +97,7 @@ const Profile: NextPage = () => {
    */
   useEffect(() => {
     (async () => {
+      setLoading(true);
       /**
        * this attempts to fetch the wallet connection and set it in React State
        */
@@ -117,6 +118,7 @@ const Profile: NextPage = () => {
         });
         setProviders(tempProviders);
       }
+      setLoading(false);
     })();
   }, [user]);
 
@@ -125,6 +127,7 @@ const Profile: NextPage = () => {
    */
   useEffect(() => {
     (async () => {
+      setLoading(true);
       /**
        * if there is a wallet address in React state we update the wallet connection.
        * this is done such that we update the wallet connection to contain both discord & slack (if that's the case)
@@ -145,6 +148,7 @@ const Profile: NextPage = () => {
           toast.error(error.message, toastOptions);
         }
       }
+      setLoading(false);
     })();
   }, [providers]);
 
