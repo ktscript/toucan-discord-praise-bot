@@ -9,14 +9,21 @@ import { LinkBtn } from "../components/Buttons";
 import { Loader, NotLoggedInModal } from "../components/Modals";
 import fetchProfile from "../utils/fetchProfile";
 import fetchWallet from "../utils/fetchWallet";
+import getMetaMaskAccount from "../utils/getMetaMaskAccount";
 import ifcWalletConnection from "../utils/ifcWalletConnection";
 import { supabase } from "../utils/supabaseClient";
 import toastOptions from "../utils/toastOptions";
+
+interface ifcProviders {
+  slackId?: string;
+  discordId?: string;
+}
 
 const Profile: NextPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [wallet, setWallet] = useState<ifcWalletConnection | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [providers, setProviders] = useState<ifcProviders>({});
 
   const deleteWallet = async () => {
     console.log("attempting to delete wallet");
@@ -42,37 +49,28 @@ const Profile: NextPage = () => {
     console.log("attempting to connect to the MetaMask wallet");
     try {
       setLoading(true);
-      // @ts-ignore
-      const { ethereum } = window;
-      if (!ethereum) {
-        throw new Error("MetaMask not connected");
-      }
 
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const { chainId } = await provider.getNetwork();
-      // TODO add more networks
-      if (chainId != 4) {
-        throw new Error("Make sure you are on Rinkeby Test Network.");
-      }
+      /**
+       * we attempt to get the metamask accounts from the browser
+       */
+      const accounts = await getMetaMaskAccount();
 
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-
-      const user = await fetchProfile();
-
+      /**
+       * and we attempt to save the wallet connection to the database
+       */
       const { data, error } = await supabase
         .from<ifcWalletConnection>("wallet_connections")
         .insert([
           {
-            // @ts-ignore because if it's null it will simply return an error which is handled down below
-            user_id: user.id,
-            // @ts-ignore because if it's null it will simply return an error which is handled down below
-            discord_id: user.user_metadata.provider_id,
+            user_id: user?.id,
+            discord_id: providers.discordId,
+            slack_id: providers.slackId,
             wallet_address: accounts[0],
           },
         ]);
       if (error) throw error;
+
+      // we refetch the wallet and set it into React State
       setWallet(await fetchWallet(user?.id || ""));
       toast(`Connected your wallet`, toastOptions);
     } catch (error: any) {
@@ -83,25 +81,85 @@ const Profile: NextPage = () => {
     }
   };
 
+  /**
+   * this piece of codes runs whenever anything on the page changes
+   */
   useEffect(() => {
     (async () => {
       setLoading(true);
       setUser(await supabase.auth.user());
+      setLoading(false);
+    })();
+  }, []);
+
+  /**
+   * this piece of codes runs whenever 'user' React State changes
+   */
+  useEffect(() => {
+    (async () => {
+      /**
+       * this attempts to fetch the wallet connection and set it in React State
+       */
       if (user?.id) {
         setWallet(await fetchWallet(user?.id));
       }
-      setLoading(false);
+      /**
+       * we are trying to extract the slack/discord identities in a easy to access React State
+       */
+      if (user?.identities) {
+        const tempProviders: ifcProviders = {};
+        user.identities.map((identity) => {
+          if (identity.provider === "slack") {
+            tempProviders.slackId = identity.identity_data.provider_id;
+          } else if (identity.provider === "discord") {
+            tempProviders.discordId = identity.identity_data.provider_id;
+          }
+        });
+        setProviders(tempProviders);
+      }
     })();
-    console.log("state of wallet:", wallet);
-  }, []);
+  }, [user]);
+
+  /**
+   * this piece of codes runs whenever 'providers' React State changes
+   */
+  useEffect(() => {
+    (async () => {
+      /**
+       * if there is a wallet address in React state we update the wallet connection.
+       * this is done such that we update the wallet connection to contain both discord & slack (if that's the case)
+       * TODO: this is not the most efficient solution, but it gets the job done for now
+       */
+      if (wallet?.wallet_address) {
+        const { data, error } = await supabase
+          .from<ifcWalletConnection>("wallet_connections")
+          .update({
+            user_id: user?.id,
+            discord_id: providers.discordId,
+            slack_id: providers.slackId,
+            wallet_address: wallet.wallet_address,
+          })
+          .match({ user_id: user?.id });
+        if (error) {
+          console.error("error when updating walletConnection", error);
+          toast.error(error.message, toastOptions);
+        }
+      }
+    })();
+  }, [providers]);
 
   if (loading) {
+    console.log("loading...");
     return <Loader />;
   }
 
   if (!user) {
     return <NotLoggedInModal />;
   }
+
+  console.log("state of user:", user);
+  console.log("state of wallet:", wallet);
+  console.log("state of providers:", providers);
 
   return (
     <div>
@@ -130,7 +188,7 @@ const Profile: NextPage = () => {
                 htmlFor="project-name"
                 className="block text-sm font-medium text-gray-700"
               >
-                Photo (from Discord)
+                Photo
               </label>
               <div className="mt-1 text-sm text-gray-500">
                 <Image
@@ -175,17 +233,37 @@ const Profile: NextPage = () => {
               <div className="mt-1 text-sm text-gray-500">{user.id}</div>
             </div>
 
-            <div>
-              <label
-                htmlFor="project-name"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Discord ID
-              </label>
-              <div className="mt-1 text-sm text-gray-500">
-                {user.user_metadata.provider_id}
+            {providers.discordId ? (
+              <div>
+                <label
+                  htmlFor="project-name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Discord ID
+                </label>
+                <div className="mt-1 text-sm text-gray-500">
+                  {providers.discordId}
+                </div>
               </div>
-            </div>
+            ) : (
+              ""
+            )}
+
+            {providers.slackId ? (
+              <div>
+                <label
+                  htmlFor="project-name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Slack ID
+                </label>
+                <div className="mt-1 text-sm text-gray-500">
+                  {providers.slackId}
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
 
             {wallet ? (
               <div>
