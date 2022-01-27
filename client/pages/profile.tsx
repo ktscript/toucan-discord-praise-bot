@@ -1,23 +1,21 @@
-import { ApiError, User } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 import { ethers } from "ethers";
-import { NextApiRequest, NextPage } from "next";
+import { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { LinkBtn } from "../components/Buttons";
 import { Loader, NotLoggedInModal } from "../components/Modals";
 import fetchProfile from "../utils/fetchProfile";
 import fetchWallet from "../utils/fetchWallet";
-import getUserByCookie from "../utils/getUserByCookie";
-import discordToWalletConnection from "../utils/ifcDiscordtoWalletConnection";
+import ifcWalletConnection from "../utils/ifcWalletConnection";
 import { supabase } from "../utils/supabaseClient";
 import toastOptions from "../utils/toastOptions";
 
 const Profile: NextPage = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [wallet, setWallet] = useState<discordToWalletConnection | null>(null);
+  const [wallet, setWallet] = useState<ifcWalletConnection | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const deleteWallet = async () => {
@@ -25,7 +23,7 @@ const Profile: NextPage = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from<discordToWalletConnection>("discordToWalletConnections")
+        .from<ifcWalletConnection>("wallet_connections")
         .delete();
       if (error) throw error;
       toast("Wallet deleted successfully", toastOptions);
@@ -64,7 +62,7 @@ const Profile: NextPage = () => {
       const user = await fetchProfile();
 
       const { data, error } = await supabase
-        .from<discordToWalletConnection>("discordToWalletConnections")
+        .from<ifcWalletConnection>("wallet_connections")
         .insert([
           {
             // @ts-ignore because if it's null it will simply return an error which is handled down below

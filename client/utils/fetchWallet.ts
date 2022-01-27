@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
-import discordToWalletConnection from "./ifcDiscordtoWalletConnection";
+import ifcWalletConnection from "./ifcWalletConnection";
+
 import { supabase } from "./supabaseClient";
 import toastOptions from "./toastOptions";
 
@@ -8,13 +9,11 @@ import toastOptions from "./toastOptions";
  * @description Attempts to fetch user's wallet from Supabase dB
  * @returns the walletToDiscordConnection object or null; also notifys us of the result with Toastify
  */
-const fetchWallet = async (
-  id: string
-): Promise<discordToWalletConnection | null> => {
+const fetchWallet = async (id: string): Promise<ifcWalletConnection | null> => {
   console.log("attempting to fetch wallet");
   try {
     const { data, error } = await supabase
-      .from<discordToWalletConnection>("discordToWalletConnections")
+      .from<ifcWalletConnection>("wallet_connections")
       .select()
       .eq("user_id", id);
     if (error) throw error;
