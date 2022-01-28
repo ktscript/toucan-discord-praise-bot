@@ -7,7 +7,7 @@ import handleHelpCommand from "./commandHandlers/handleHelpCommand";
 import fetchWalletConnection from "./utils/fetchWalletConnection";
 import fetchTptBalance from "./utils/fetchTptBalance";
 import { utils } from "ethers";
-import { App, SayFn } from "@slack/bolt";
+import { App, SayFn, SlackCommandMiddlewareArgs } from "@slack/bolt";
 require("dotenv").config();
 
 // <discord bot>
@@ -15,7 +15,7 @@ const PREFIX = "!";
 const clientUrl: string = process.env.CLIENT_URL || "";
 
 discord.on("ready", () => {
-  console.log("Bot Online! Woohooo!");
+  console.log("Discord Bot Online! Woohooo!");
 });
 
 // TODO it'd be nice if all msg.reply would be private
@@ -98,6 +98,21 @@ slack.message("hello", async ({ message, say }: ifcCallbackFnParams) => {
   console.log(`O zis hello unu ${message.user} !`);
   await say(`Salut bai baiatule <@${message.user}>!`);
 });
+
+slack.command(
+  "/echo",
+  async ({ command, ack, respond }: SlackCommandMiddlewareArgs) => {
+    // Acknowledge command request
+    await ack();
+
+    // this is actually pretty cool because it replies privately (therefore not cluttering the chat)
+    await respond(
+      `${
+        command.text || "Wow, be careful. You should give me something to echo."
+      }`
+    );
+  }
+);
 
 (async () => {
   await slack.start();
