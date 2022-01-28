@@ -6,9 +6,11 @@ import handleConnectCommand from "./commandHandlers/handleConnectCommand";
 import handleHelpCommand from "./commandHandlers/handleHelpCommand";
 import fetchWalletConnection from "./utils/fetchWalletConnection";
 import fetchTptBalance from "./utils/fetchTptBalance";
-import { BigNumber, utils } from "ethers";
+import { utils } from "ethers";
+import { App, SayFn } from "@slack/bolt";
 require("dotenv").config();
 
+// <discord bot>
 const PREFIX = "!";
 const clientUrl: string = process.env.CLIENT_URL || "";
 
@@ -75,3 +77,31 @@ discord.on("messageCreate", (msg: Message) => {
 
 const discordToken: string = process.env.DISCORD_TOKEN || "";
 discord.login(discordToken);
+// </discord bot>
+
+// <slack_bot>
+const { App: Slack } = require("@slack/bolt");
+
+const slack: App = new Slack({
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  socketMode: true,
+  appToken: process.env.SLACK_APP_TOKEN,
+});
+
+interface ifcCallbackFnParams {
+  message: any;
+  say: SayFn;
+}
+
+slack.message("hello", async ({ message, say }: ifcCallbackFnParams) => {
+  console.log(`O zis hello unu ${message.user} !`);
+  await say(`Salut bai baiatule <@${message.user}>!`);
+});
+
+(async () => {
+  await slack.start();
+
+  console.log("⚡️ Bolt app is running!");
+})();
+// </slack_bot>
