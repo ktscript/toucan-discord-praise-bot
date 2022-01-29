@@ -94,8 +94,6 @@ export const handlePraiseCommand = async (
        * this is the moment we interact with the contract to actually praise someone on the blockchain
        */
       const res = await callPraise(
-        msg,
-        user,
         praiserWalletConnection,
         praiseTargetWalletConnection
       );
