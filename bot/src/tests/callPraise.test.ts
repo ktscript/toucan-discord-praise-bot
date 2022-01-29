@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import { Message } from "discord.js";
 import callPraise from "../utils/callPraise";
-import { discord } from "../utils/discordClient";
-import fetchUserById from "../utils/fetchUserByID";
+import { discord } from "../utils/discord/discordClient";
+import fetchUserById from "../utils/discord/fetchUserByID";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
 require("dotenv").config();
 
@@ -64,8 +64,6 @@ describe("Testing the callPraise() function", () => {
     discord.destroy();
 
     const res = await callPraise(
-      exampleMessage,
-      target,
       praiserWalletConnection,
       praiseTargetWalletConnection
     );

@@ -1,6 +1,6 @@
 import { Message, User } from "discord.js";
 import { parse, ParsedMessage } from "discord-command-parser";
-import { discord } from "./utils/discordClient";
+import { discord } from "./utils/discord/discordClient";
 import { handlePraiseCommand } from "./commandHandlers/handlePraiseCommand";
 import handleConnectCommand from "./commandHandlers/handleConnectCommand";
 import handleHelpCommand from "./commandHandlers/handleHelpCommand";

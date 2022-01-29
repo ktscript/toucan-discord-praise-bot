@@ -3,12 +3,12 @@ import { parse, ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
 import { BigNumber, utils } from "ethers";
 import callPraise from "../utils/callPraise";
-import { discord } from "../utils/discordClient";
+import { discord } from "../utils/discord/discordClient";
 import fetchTptBalance from "../utils/fetchTptBalance";
-import fetchUserById from "../utils/fetchUserByID";
+import fetchUserById from "../utils/discord/fetchUserByID";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
-import ifcPraise from "../utils/ifcPraise";
-import parsePraise from "../utils/parsePraise";
+import ifcPraise from "../utils/discord/ifcPraise";
+import parsePraise from "../utils/discord/parsePraise";
 require("dotenv").config();
 
 const PREFIX = "!";

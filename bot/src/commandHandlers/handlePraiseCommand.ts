@@ -1,10 +1,10 @@
 import { ParsedMessage } from "discord-command-parser";
 import { Message } from "discord.js";
 import callPraise from "../utils/callPraise";
-import fetchUserById from "../utils/fetchUserByID";
+import fetchUserById from "../utils/discord/fetchUserByID";
 import fetchWalletConnection from "../utils/fetchWalletConnection";
-import ifcPraise from "../utils/ifcPraise";
-import parsePraise from "../utils/parsePraise";
+import ifcPraise from "../utils/discord/ifcPraise";
+import parsePraise from "../utils/discord/parsePraise";
 
 /**
  * @description attempts to call the praise method from the ToucanPraiseToken contract onto the praisee
