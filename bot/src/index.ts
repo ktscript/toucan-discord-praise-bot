@@ -176,8 +176,9 @@ slack.command(
 
       let tempPraiseReason = body.text.match(expressions.praiseReason);
       const praiseReason = tempPraiseReason ? tempPraiseReason[0] : null;
+
       /**
-       * We handle any errors
+       * We handle any errors with the parsed praised
        */
       if (!praiseTarget)
         throw new Error(
@@ -187,6 +188,9 @@ slack.command(
       if (praiseTarget == body.user_id)
         throw new Error(`You can't praise yourself <@${body.user_id}>.`);
 
+      /**
+       * We fetch the wallets and handle any errors
+       */
       const praiserWalletConnection = await fetchWalletConnection(
         "slack",
         body.user_id
