@@ -7,7 +7,8 @@ import handleHelpCommand from "./commandHandlers/handleHelpCommand";
 import fetchWalletConnection from "./utils/fetchWalletConnection";
 import fetchTptBalance from "./utils/fetchTptBalance";
 import { utils } from "ethers";
-import { App, SayFn, SlackCommandMiddlewareArgs } from "@slack/bolt";
+import { App as Slack } from "@slack/bolt";
+import { SayFn, SlackCommandMiddlewareArgs } from "@slack/bolt";
 require("dotenv").config();
 
 // <discord bot>
@@ -80,9 +81,8 @@ discord.login(discordToken);
 // </discord bot>
 
 // <slack_bot>
-const { App: Slack } = require("@slack/bolt");
 
-const slack: App = new Slack({
+const slack: Slack = new Slack({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   socketMode: true,
@@ -102,10 +102,7 @@ slack.message("hello", async ({ message, say }: ifcCallbackFnParams) => {
 slack.command(
   "/echo",
   async ({ command, ack, respond }: SlackCommandMiddlewareArgs) => {
-    // Acknowledge command request
     await ack();
-
-    // this is actually pretty cool because it replies privately (therefore not cluttering the chat)
     await respond(
       `${
         command.text || "Wow, be careful. You should give me something to echo."
@@ -114,9 +111,47 @@ slack.command(
   }
 );
 
+slack.command(
+  "/help",
+  async ({ command, ack, respond }: SlackCommandMiddlewareArgs) => {
+    await ack();
+    await respond(
+      `Hey there, I'm the Praise Bot. Here's a list of the commands that you can use: ` +
+        `\n\n- "/connect" to connect your slack & wallet to this bot so you can praise & be praised` +
+        `\n\n- "/praise @john.appleseed for [insert reason]" to praise someone with the reason for the praise. ` +
+        `It's very important to tag them before stating the reason. Stating a reason is optional, ` +
+        `but if you do, you have to mark it by using the "for" keyword before stating the reason.` +
+        `\n\n Those are all the commands. It's important to note that the amount of TPT the person you praise ` +
+        `receives is calculated based on how much TPT you have yourself. In this way, TPT acts like reputation.` +
+        `\n\n One more important thing, we are using Rinkeby (for now) &` +
+        // TODO this address needs to be modified if you redeploy
+        ` this is the token's address: 0x5C3D88A68d3AD54CfEB87d56Cc64421E3EEEC347.` +
+        `\n\n You will use this address to import the token into your wallet.`
+    );
+  }
+);
+
+slack.command(
+  "/connect",
+  async ({ command, ack, respond }: SlackCommandMiddlewareArgs) => {
+    await ack();
+    await respond(
+      `Connect your wallet (or manage your profile) at ${clientUrl}`
+    );
+  }
+);
+
+slack.command(
+  "/praise",
+  async ({ command, ack, respond, body }: SlackCommandMiddlewareArgs) => {
+    await ack();
+    await respond(`We praised your target!`);
+    console.log(body);
+  }
+);
+
 (async () => {
   await slack.start();
-
   console.log("⚡️ Bolt app is running!");
 })();
 // </slack_bot>
