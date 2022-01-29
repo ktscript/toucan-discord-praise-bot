@@ -166,17 +166,13 @@ slack.command(
         praiseReason: /for [ch:(\S+\s)]*/,
       };
 
-      let tempPraiseTarget;
-      const praiseTarget = (tempPraiseTarget = body.text.match(
-        expressions.praiseTargetSlackId
-      ))
+      let tempPraiseTarget = body.text.match(expressions.praiseTargetSlackId);
+      const praiseTarget = tempPraiseTarget
         ? tempPraiseTarget[0].replace("<@", "")
         : "";
 
-      const praiseReason = body.text.match(expressions.praiseReason);
-
-      console.log("praiseReason", praiseReason);
-
+      let tempPraiseReason = body.text.match(expressions.praiseReason);
+      const praiseReason = tempPraiseReason ? tempPraiseReason[0] : null;
       /**
        * We handle any errors
        */
