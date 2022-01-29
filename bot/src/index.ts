@@ -11,6 +11,8 @@ import { App as Slack } from "@slack/bolt";
 import { SayFn, SlackCommandMiddlewareArgs } from "@slack/bolt";
 require("dotenv").config();
 
+// TODO we are not actually storing or doing anything with the praise reasons aside from parsing them
+
 // <discord bot>
 const PREFIX = "!";
 const clientUrl: string = process.env.CLIENT_URL || "";
@@ -81,7 +83,10 @@ discord.login(discordToken);
 // </discord bot>
 
 // <slack_bot>
-
+/**
+ * TODO while the discord bot can parse messages to praise multiple people, the Slack one can't yet do that.
+ * On Slack you can only praise one person at a time.
+ */
 const slack: Slack = new Slack({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
@@ -150,15 +155,51 @@ slack.command(
     body,
     payload,
   }: SlackCommandMiddlewareArgs) => {
-    await ack();
-    await respond(`We praised your target!`);
-    console.log("body", body);
-    console.log("payload", payload);
-    // TODO parse command
-    // example text to be parsed "<@U030ZPF694Y|toucan_praise_bot> for XYZ &amp; ABC"
+    try {
+      await ack();
 
-    // /^<@[a-zA-Z0-9]*/gm      this regex will match the slack user id
-    // /for \N*/gm              this regex will match the reason
+      /**
+       * First we parse the praise
+       */
+      const expressions = {
+        praiseTargetSlackId: /^<@[a-zA-Z0-9]*/gm,
+        praiseReason: /for [ch:(\S+\s)]*/,
+      };
+
+      let tempPraiseTarget;
+      const praiseTarget = (tempPraiseTarget = body.text.match(
+        expressions.praiseTargetSlackId
+      ))
+        ? tempPraiseTarget[0].replace("<@", "")
+        : "";
+
+      const praiseReason = body.text.match(expressions.praiseReason);
+
+      console.log("praiseReason", praiseReason);
+
+      /**
+       * We handle any errors
+       */
+      if (!praiseTarget)
+        throw new Error(
+          `You need to specify a praise target <@${body.user_id}>.`
+        );
+
+      if (praiseTarget == body.user_id)
+        throw new Error(`You can't praise yourself <@${body.user_id}>.`);
+
+      // TODO check if both praiser and praise target have wallets connected
+
+      // TODO interact with contract to praise
+
+      /**
+       * We let the user know the praise was successful
+       */
+      await respond(`We praised your target, <@${praiseTarget}>!`);
+    } catch (error: any) {
+      console.log("ERROR:", error.message);
+      await respond(error.message);
+    }
   }
 );
 
