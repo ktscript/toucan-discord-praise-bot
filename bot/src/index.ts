@@ -158,7 +158,7 @@ slack.command(
     // example text to be parsed "<@U030ZPF694Y|toucan_praise_bot> for XYZ &amp; ABC"
 
     // /^<@[a-zA-Z0-9]*/gm      this regex will match the slack user id
-    // /for \N*/gm              this regex will mactch the reason
+    // /for \N*/gm              this regex will match the reason
   }
 );
 
