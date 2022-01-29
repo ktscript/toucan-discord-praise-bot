@@ -87,6 +87,8 @@ discord.login(discordToken);
  * TODO while the discord bot can parse messages to praise multiple people, the Slack one can't yet do that.
  * On Slack you can only praise one person at a time.
  */
+
+// TODO the slack part is kinda messy, need to clean it up
 const slack: Slack = new Slack({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
