@@ -19,7 +19,7 @@ const handleConnectCommand = (msg: Message, clientUrl: string) => {
   /**
    * if the user has a wallet connection, you give him a certain message
    */
-  if (async () => await fetchWalletConnection(msg.author.id)) {
+  if (async () => await fetchWalletConnection("discord", msg.author.id)) {
     msg.reply(
       `You have connected before your discord already. You can manage your profile and connect your wallet here ${clientUrl}`
     );

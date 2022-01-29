@@ -64,7 +64,10 @@ export const handlePraiseCommand = async (
     /**
      * Check if the user that is trying to praise has his wallet connected
      */
-    const praiserWalletConnection = await fetchWalletConnection(msg.author.id);
+    const praiserWalletConnection = await fetchWalletConnection(
+      "discord",
+      msg.author.id
+    );
     if (!praiserWalletConnection) {
       msg.reply(
         `You need to connect your wallet before you can praise someone, go to ${clientUrl}`
@@ -77,7 +80,10 @@ export const handlePraiseCommand = async (
      * check praiseTargets' walletConnection(s), praise the ones that do, tell the ones that don't to connect
      */
     praise.praiseTargets.map(async (id) => {
-      const praiseTargetWalletConnection = await fetchWalletConnection(id);
+      const praiseTargetWalletConnection = await fetchWalletConnection(
+        "discord",
+        id
+      );
       const user = await fetchUserById(id);
 
       if (!praiseTargetWalletConnection) {

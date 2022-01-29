@@ -45,9 +45,11 @@ const exampleMessage: Message = {
 describe("Testing the callPraise() function", () => {
   it("Expecting status code of the txn to be 1", async () => {
     const praiserWalletConnection = await fetchWalletConnection(
-      "369184527286927371" // this would be me
+      "discord",
+      "369184527286927371" // this would be my discord id
     );
     const praiseTargetWalletConnection = await fetchWalletConnection(
+      "discord",
       "927661675736350791" // this would be Toucan Praise Bot's discord ID (I've made a walletConnection for it under Carmen's discord & another wallet of mine)
     );
     expect(praiserWalletConnection).to.not.be.undefined;

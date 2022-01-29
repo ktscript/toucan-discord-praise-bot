@@ -41,7 +41,7 @@ setInterval(async () => {
     /**
      * it checks if user has connected their wallet yet and skips him if not
      */
-    const walletConnection = await fetchWalletConnection(user.id);
+    const walletConnection = await fetchWalletConnection("discord", user.id);
     if (!walletConnection) return;
 
     /**
