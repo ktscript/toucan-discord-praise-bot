@@ -9,6 +9,7 @@ import fetchTptBalance from "./utils/fetchTptBalance";
 import { utils } from "ethers";
 import { App as Slack } from "@slack/bolt";
 import { SayFn, SlackCommandMiddlewareArgs } from "@slack/bolt";
+import ifcWalletConnection from "./utils/ifcWalletConnection";
 require("dotenv").config();
 
 // TODO we are not actually storing or doing anything with the praise reasons aside from parsing them
@@ -186,7 +187,24 @@ slack.command(
       if (praiseTarget == body.user_id)
         throw new Error(`You can't praise yourself <@${body.user_id}>.`);
 
-      // TODO check if both praiser and praise target have wallets connected
+      const praiserWalletConnection = await fetchWalletConnection(
+        "slack",
+        body.user_id
+      );
+      if (!praiserWalletConnection)
+        throw new Error(
+          `Your wallet is not connected <@${body.user_id}>. Go to ${clientUrl}`
+        );
+
+      const praiseTargerWalletConnection = await fetchWalletConnection(
+        "slack",
+        praiseTarget
+      );
+      if (!praiserWalletConnection)
+        throw new Error(
+          `<@${praiseTarget}>'s wallet is not connected, so you can't praise them <@${body.user_id}>. ` +
+            `They should go to ${clientUrl} to connect`
+        );
 
       // TODO interact with contract to praise
 
