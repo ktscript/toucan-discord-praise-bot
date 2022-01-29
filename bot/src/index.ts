@@ -143,10 +143,18 @@ slack.command(
 
 slack.command(
   "/praise",
-  async ({ command, ack, respond, body }: SlackCommandMiddlewareArgs) => {
+  async ({
+    command,
+    ack,
+    respond,
+    body,
+    payload,
+  }: SlackCommandMiddlewareArgs) => {
     await ack();
     await respond(`We praised your target!`);
-    console.log(body);
+    console.log("body", body);
+    console.log("payload", payload);
+    // TODO parse command
   }
 );
 
