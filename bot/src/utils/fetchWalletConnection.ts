@@ -18,8 +18,7 @@ const fetchWalletConnection = async (
         .select()
         .eq(`${provider}_id`, id);
     if (error) throw error;
-    if (!data || !data[0])
-      throw new Error("No data matching the given Discord ID");
+    if (!data || !data[0]) throw new Error("No data matching the given ID");
     return data[0];
   } catch (error: any) {
     console.error(`Error when checking walletConnection:`, error);

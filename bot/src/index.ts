@@ -142,11 +142,18 @@ slack.command(
 
 slack.command(
   "/connect",
-  async ({ command, ack, respond }: SlackCommandMiddlewareArgs) => {
+  async ({ command, ack, respond, body }: SlackCommandMiddlewareArgs) => {
     await ack();
-    await respond(
-      `Connect your wallet (or manage your profile) at ${clientUrl}`
-    );
+    const walletConnection = await fetchWalletConnection("slack", body.user_id);
+    if (walletConnection) {
+      await respond(
+        `Your wallet seems to be connected <@${body.user_id}>. Go to ${clientUrl} if you want to manage your profile.`
+      );
+    } else {
+      await respond(
+        `Connect your wallet (or manage your profile) at ${clientUrl}`
+      );
+    }
   }
 );
 
