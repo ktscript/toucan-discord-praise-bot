@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { DiscordAuthBtn } from "./Buttons";
+import { DiscordAuthBtn, SlackAuthBtn } from "./Buttons";
 
 export function Loader() {
   const [open, setOpen] = useState(true);
@@ -131,7 +131,10 @@ export function NotLoggedInModal() {
                     You are not logged in.
                   </Dialog.Title>
                   <div className="mt-4 flex justify-center">
-                    <DiscordAuthBtn />
+                    <DiscordAuthBtn extraClasses="w-full" />
+                  </div>
+                  <div className="mt-4 flex justify-center">
+                    <SlackAuthBtn extraClasses="w-full" />
                   </div>
                 </div>
               </div>
