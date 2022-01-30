@@ -14,17 +14,21 @@ const callPraise = async (
 ) => {
   try {
     const provider = new ethers.providers.JsonRpcProvider(
+      // TODO change when deploy on another network
       process.env.INFURA_RINKEBY_URL,
       4
     );
     let wallet = new ethers.Wallet(
+      // TODO change when deploy on another network
       process.env.RINKEBY_PRIVATE_KEY || "",
       provider
     );
+    // TODO change when deploy on another network
     const signer = provider.getSigner(process.env.OWNER_ADDRESS_RINKEBY);
     wallet = wallet.connect(provider);
 
     const tptContract = new ethers.Contract(
+      // TODO change when deploy on another network
       process.env.RINKEBY_CONTRACT_ADDRESS || "",
       artifact.abi,
       wallet

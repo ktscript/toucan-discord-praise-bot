@@ -131,7 +131,7 @@ const Profile: NextPage = () => {
       /**
        * if there is a wallet address in React state we update the wallet connection.
        * this is done such that we update the wallet connection to contain both discord & slack (if that's the case)
-       * TODO: this is not the most efficient solution, but it gets the job done for now
+       * potential TODO: this is not the most efficient solution, but it gets the job done for now
        */
       if (wallet?.wallet_address) {
         const { data, error } = await supabase

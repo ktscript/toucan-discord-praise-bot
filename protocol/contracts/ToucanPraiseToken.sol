@@ -46,7 +46,7 @@ contract ToucanPraiseToken is ERC20 {
         */
         _mint(_to, praiseWorth);
 
-        // TODO emit an event
+        // potential TODO emit event
         return true;
     }
 }
