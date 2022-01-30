@@ -74,7 +74,7 @@ describe("Testing utils functions", () => {
   });
 
   describe("Testing the fetchTptBalance() function", () => {
-    it("Expecting a my tpt balance to be 30", async () => {
+    it("Expecting my tpt balance to be 30", async () => {
       const myBalance = await fetchTptBalance(
         "0x721F6f7A29b99CbdE1F18C4AA7D7AEb31eb2923B"
       );
@@ -90,9 +90,12 @@ describe("Testing utils functions", () => {
     it("Expecting a discordToWalletConnection object for the corresponding Discord ID", async () => {
       const walletConnection = await fetchWalletConnection(
         "discord",
-        "369184527286927371" // this would be my discord id
+        "369184527286927371" // this would be my slack id
       );
 
+      /**
+       * this can change depending on wether I am actually in the Supabase table
+       */
       expect(walletConnection?.discord_id).to.eql("369184527286927371");
     });
   });

@@ -10,6 +10,7 @@ import { utils } from "ethers";
 import { App as Slack } from "@slack/bolt";
 import { SayFn, SlackCommandMiddlewareArgs } from "@slack/bolt";
 import ifcWalletConnection from "./utils/ifcWalletConnection";
+import callPraise from "./utils/callPraise";
 require("dotenv").config();
 
 // TODO we are not actually storing or doing anything with the praise reasons aside from parsing them
@@ -200,22 +201,37 @@ slack.command(
           `Your wallet is not connected <@${body.user_id}>. Go to ${clientUrl}`
         );
 
-      const praiseTargerWalletConnection = await fetchWalletConnection(
+      const praiseTargetWalletConnection = await fetchWalletConnection(
         "slack",
         praiseTarget
       );
-      if (!praiserWalletConnection)
+      if (!praiseTargetWalletConnection)
         throw new Error(
           `<@${praiseTarget}>'s wallet is not connected, so you can't praise them <@${body.user_id}>. ` +
             `They should go to ${clientUrl} to connect`
         );
 
-      // TODO interact with contract to praise
+      /**
+       * Lastly, we call the praise method from the contract
+       */
+      const res = await callPraise(
+        praiserWalletConnection,
+        praiseTargetWalletConnection
+      );
+
+      // if the praise method was not successful, we handle that
+      if (res.status !== 1) {
+        throw new Error(
+          "Something bad might have happened when calling the praise contract method."
+        );
+      }
 
       /**
-       * We let the user know the praise was successful
+       * If the code got here, we let the user know the praise was successful
        */
-      await respond(`We praised your target, <@${praiseTarget}>!`);
+      await respond(
+        `We successfully praised your <@${praiseTarget}>, <@${praiseTarget}>!`
+      );
     } catch (error: any) {
       console.log("ERROR:", error.message);
       await respond(error.message);
