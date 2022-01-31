@@ -16,6 +16,15 @@ contract ToucanPraiseToken is ERC20 {
     *
     * Mints & sends praiseTokens to an address based on the senders balance
     */
+    /**
+    * TODO this could be abused. all someone needs to do is make a simple UI, 
+    * and spam praise their own wallets in between themselves and, as such, 
+    * achieve a very high TPT balance.
+    *
+    * Solutiones?
+    * 1. we could make it that the praise method is only callable by the owner
+    * 2. can we implement a timeout? so that you can only praise once per minute?
+    */
     function praise(address _from, address _to) public returns (bool) {
         /**
          * Just making sure ppl can't praise themselves.
