@@ -103,11 +103,6 @@ interface ifcCallbackFnParams {
   say: SayFn;
 }
 
-slack.message("hello", async ({ message, say }: ifcCallbackFnParams) => {
-  console.log(`O zis hello unu ${message.user} !`);
-  await say(`Salut bai baiatule <@${message.user}>!`);
-});
-
 slack.command(
   "/echo",
   async ({ command, ack, respond }: SlackCommandMiddlewareArgs) => {
