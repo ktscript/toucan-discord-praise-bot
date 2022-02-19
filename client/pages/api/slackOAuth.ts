@@ -40,7 +40,7 @@ export default async function handler(
         bot_user_id: access.bot_user_id,
       },
     ]);
-    if (error) throw new Error("Error when inserting data in dB");
+    if (error) throw error;
 
     res
       .status(200)
