@@ -16,12 +16,11 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    // TODO this should be the on inserting an ifcInstallation into db
     const code = req.query["code"];
     if (!code || code == "") throw new Error("No code provided");
 
     const slack: Slack = new Slack({
-      token: process.env.SLACK_BOT_TOKEN, // TODO this will need to be taken from dB, but how does this know which token to take
+      token: process.env.SLACK_BOT_TOKEN,
       signingSecret: process.env.SLACK_SIGNING_SECRET,
       socketMode: true,
       appToken: process.env.SLACK_APP_TOKEN,
