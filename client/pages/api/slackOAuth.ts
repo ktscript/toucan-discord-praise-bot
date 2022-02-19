@@ -41,8 +41,8 @@ export default async function handler(
       bot_user_id: access.bot_user_id,
     },
   ]);
-  if (error) {
-    res.status(500).json(error);
+  if (error || !req.query["code"]) {
+    res.status(500).json({ message: "Some error happened", error: error });
   } else {
     res
       .status(200)
