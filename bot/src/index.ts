@@ -11,6 +11,7 @@ import { App as Slack } from "@slack/bolt";
 import { SayFn, SlackCommandMiddlewareArgs } from "@slack/bolt";
 import ifcWalletConnection from "./utils/ifcWalletConnection";
 import callPraise from "./utils/callPraise";
+import { supabase } from "./utils/supabaseClient";
 require("dotenv").config();
 
 // TODO we are not actually storing or doing anything with the praise reasons aside from parsing them
@@ -91,17 +92,52 @@ discord.login(discordToken);
  */
 
 // TODO the slack part is kinda messy, need to clean it up
-const slack: Slack = new Slack({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  socketMode: true,
-  appToken: process.env.SLACK_APP_TOKEN,
-});
 
-interface ifcCallbackFnParams {
-  message: any;
-  say: SayFn;
+interface ifcSlackInstallation {
+  enterpriseId?: string;
+  teamId: string;
+  botToken: string; // starting with xoxb
+  botId: string;
+  botUserId: string;
 }
+
+const authorizeFn = async ({
+  teamId,
+  enterpriseId,
+}: {
+  teamId: string;
+  enterpriseId?: string;
+}) => {
+  let { data: slack_installations, error } = await supabase
+    .from<ifcSlackInstallation>("slack_installations")
+    .select("*");
+
+  if (slack_installations == null || error) {
+    throw new Error("No slack installations found.");
+  }
+
+  // Fetch team info from database
+  for (const team of slack_installations) {
+    // Check for matching teamId and enterpriseId in the installations array
+    if (team.teamId === teamId && team.enterpriseId === enterpriseId) {
+      // This is a match. Use these installation credentials.
+      return {
+        // You could also set userToken instead
+        botToken: team.botToken,
+        botId: team.botId,
+        botUserId: team.botUserId,
+      };
+    }
+  }
+
+  throw new Error("No matching authorizations");
+};
+
+const slack: Slack = new Slack({
+  // @ts-ignore
+  authorize: authorizeFn,
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+});
 
 slack.command(
   "/echo",
@@ -243,6 +279,6 @@ slack.command(
 
 (async () => {
   await slack.start();
-  console.log("⚡️ Bolt app is running!");
+  console.log("⚡️ Bolt/Slack app is running!");
 })();
 // </slack_bot>
