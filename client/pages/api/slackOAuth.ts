@@ -35,14 +35,13 @@ export default async function handler(
     // "FetchError: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTk3MzU2NCwiZXhwIjoxOTU3NTQ5NTY0fQ.ZnbeLRHLK7U7cRHk_YPm2pZnElsfTR6US1En5x-ulBo\n is not a legal HTTP header value"
     const { data, error } = await supabase.from("slack_installations").insert([
       {
-        enterprise_id: access.enterprise?.id,
-        team_id: access.team?.id,
-        bot_token: access.access_token,
-        bot_id: access.app_id, // TODO could be wrong. example: B5910
-        bot_user_id: access.bot_user_id,
+        enterprise_id: "access.enterprise?.id",
+        team_id: "access.team?.id",
+        bot_token: "access.access_token",
+        bot_id: "access.app_id", // TODO could be wrong. example: B5910
+        bot_user_id: "access.bot_user_id",
       },
     ]);
-    // if (error) throw error;
 
     res.status(200).json({
       status: "OK",
