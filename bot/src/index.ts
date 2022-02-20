@@ -108,35 +108,47 @@ const authorizeFn = async ({
   teamId: string;
   enterpriseId?: string;
 }) => {
-  let { data: slack_installations, error } = await supabase
-    .from<ifcSlackInstallation>("slack_installations")
-    .select("*");
+  try {
+    let { data: slack_installations, error } = await supabase
+      .from("slack_installations")
+      .select("*");
 
-  if (slack_installations == null || error) {
-    throw new Error("No slack installations found.");
-  }
-
-  // Fetch team info from database
-  for (const team of slack_installations) {
-    // Check for matching teamId and enterpriseId in the installations array
-    if (team.teamId === teamId && team.enterpriseId === enterpriseId) {
-      // This is a match. Use these installation credentials.
-      return {
-        // You could also set userToken instead
-        botToken: team.botToken,
-        botId: team.botId,
-        botUserId: team.botUserId,
-      };
+    if (slack_installations == null || error) {
+      throw new Error("Could not find any slack installations");
     }
-  }
 
-  throw new Error("No matching authorizations");
+    if (!teamId && !enterpriseId) {
+      throw new Error("Team ID and enterprise ID haven't been provided");
+    }
+
+    // Fetch team info from database
+    for (const team of slack_installations) {
+      // Check for matching teamId and enterpriseId in the installations array
+      if (team.team_id == teamId && team.enterprise_id == enterpriseId) {
+        // This is a match. Use these installation credentials.
+        console.log(
+          `A succesfull request was made by team ${team.team_id} or enterprise ${team.enterprise_id}`
+        );
+        return {
+          // You could also set userToken insteadd
+          botToken: team.botToken,
+          botId: team.botId,
+          botUserId: team.botUserId,
+        };
+      }
+    }
+    throw new Error("Could not find any MATCHING slack installations");
+  } catch (error: any) {
+    console.error(`Error when authorizeFn`, error.message);
+  }
 };
 
 const slack: Slack = new Slack({
   // @ts-ignore
   authorize: authorizeFn,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
+  socketMode: true,
+  appToken: process.env.SLACK_APP_TOKEN,
 });
 
 slack.command(
