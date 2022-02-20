@@ -42,15 +42,14 @@ export default async function handler(
         bot_user_id: access.bot_user_id,
       },
     ]);
-    if (error) throw error;
+    // if (error) throw error;
 
-    res
-      .status(200)
-      .json({
-        status: "OK",
-        message: "The bot has been installed.",
-        data: data,
-      });
+    res.status(200).json({
+      status: "OK",
+      message: "The bot has been installed.",
+      data: data,
+      error: error,
+    });
   } catch (error: any) {
     res.status(500).json({ status: "NOT OK", message: error });
   }
