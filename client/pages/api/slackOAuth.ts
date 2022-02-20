@@ -31,6 +31,8 @@ export default async function handler(
       client_secret: process.env.SLACK_CLIENT_SECRET || "",
     });
 
+    // TODO some stupid error when inserting
+    // "FetchError: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTk3MzU2NCwiZXhwIjoxOTU3NTQ5NTY0fQ.ZnbeLRHLK7U7cRHk_YPm2pZnElsfTR6US1En5x-ulBo\n is not a legal HTTP header value"
     const { data, error } = await supabase.from("slack_installations").insert([
       {
         enterprise_id: access.enterprise?.id,
