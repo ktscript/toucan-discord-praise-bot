@@ -48,6 +48,6 @@ export default async function handler(
       .status(200)
       .json({ status: "OK", message: "The bot has been installed." });
   } catch (error: any) {
-    res.status(500).json({ status: "NOT OK", message: error.message });
+    res.status(500).json({ status: "NOT OK", message: error });
   }
 }
