@@ -38,7 +38,7 @@ export default async function handler(
         enterprise_id: access.enterprise?.id,
         team_id: access.team?.id,
         bot_token: access.access_token,
-        bot_id: access.app_id, // TODO could be wrong. example: B5910
+        bot_id: access.app_id, // TODO could be wrong.. example: B5910
         bot_user_id: access.bot_user_id,
       },
     ]);
